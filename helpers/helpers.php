@@ -5,6 +5,11 @@ function pretty_date($date){
 	return date("M d, Y h:i A", strtotime($date));
 }
 
+// Make Date Readable
+function pretty_date_notime($date){
+	return date("M d, Y", strtotime($date));
+}
+
 // Display money in a readable way
 function money($number) {
 	return '$ '.number_format($number, 2);

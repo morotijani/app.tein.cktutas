@@ -4,34 +4,11 @@
 	$servername = 'localhost';
 	$username = 'root';
 	$password = '';
-	$conn = new PDO("mysql:host=$servername;dbname=asteelu", $username, $password);
+	$conn = new PDO("mysql:host=$servername;dbname=tein", $username, $password);
 	session_start();
 
 	require_once($_SERVER['DOCUMENT_ROOT'].'/app.tein.cktutas/config.php');
  	require_once(BASEURL.'helpers/helpers.php');
-
- ///////////////////////////////////////////////////////////////////////////////////////////
- 	$siteQuery = "
-	    SELECT * FROM asteelu_about 
-	    LIMIT 1
-	";
-	$statement = $conn->prepare($siteQuery);
-	$statement->execute();
-	$site_result = $statement->fetchAll();
-
-	foreach ($site_result as $site_row) {
-	    $country = ucwords($site_row["about_country"]);
-	    $state = ucwords($site_row["about_state"]);
-	    $city = ucwords($site_row["about_city"]);
-	    $email = $site_row["about_email"];
-	    $phone_1 = $site_row["about_phone"];
-	    $phone_2 = $site_row["about_phone2"];
-	    $fax = $site_row["about_fax"];
-	    $street_1 = ucwords($site_row["about_street1"]);
-	    $street_2 = ucwords($site_row["about_street2"]);
-	    
-        $about_info = $site_row['about_info'];
-	}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

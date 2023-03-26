@@ -16,4 +16,4 @@ RewriteCond $1 !^(media|helpers|fonts|dist|controller|connection|robots\.txt)
 
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
-ErrorDocument 404 http://127.0.0.1/asteelu/404.html
+#ErrorDocument 404 http://127.0.0.1/asteelu/404.html

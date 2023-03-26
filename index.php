@@ -1,6 +1,6 @@
 <?php 
     require_once ("db_connection/conn.php");
-    include ("includes/header");
+    include ("includes/header.php");
 ?> 
 
 
@@ -10,8 +10,8 @@
                 <div class="col-md-4">
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
-                        <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN  dashboard</h2>
-                        <a href="" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add Member</a>
+                        <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . Dashboard</h2>
+                        <a href="add.member" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add Member</a>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
@@ -44,6 +44,11 @@
                                 <hr aria-hidden="true" class="menu-hr">
                                 <a href="account" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-person"></i> Manage account</span>
+                                    <span class=""><i class="bi bi-arrow-right"></i></span>
+                                </a>
+                                <hr aria-hidden="true" class="menu-hr">
+                                <a href="executives" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <span class="menu-item"><i class="bi bi-person-check"></i> Positions</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">

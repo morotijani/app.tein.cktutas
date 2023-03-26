@@ -2,19 +2,6 @@
     require_once ("../db_connection/conn.php");
     include ("../includes/header.php");
 ?>
-<style type="text/css">
-    input {
-        height: calc(100% - 4px);
-        margin: 2px 1px;
-        border: none;
-        background: transparent !important;
-        color: #FFFFFF !important;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: 400;
-        border: 1px solid #6B6B6B !important;
-    }
-</style>
     <div class="container-fluid">
         <main style="background-color: rgb(51, 51, 51);">
             <div class="row justify-content-center">

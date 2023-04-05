@@ -237,10 +237,20 @@
                         </div>
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
-                                <button type="button" class="text-white" style="background-color: transparent; border: none;">...</button>
+                                <div class="dropdown">
+                                    <button  class="text-white" style="background-color: transparent; border: none;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ...
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="<?= PROOT; ?>members">Refresh</a></li>
+                                        <li><a class="dropdown-item" href="<?= PROOT; ?>positions">Position</a></li>
+                                        <li><a class="dropdown-item" href="<?= PROOT; ?>executives">Executives</a></li>
+                                        <li><a class="dropdown-item" href="<?= PROOT; ?>logout">Logout</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <a href="index" class="btn btn-sm btn-outline-secondary">
-                                Home
+                            <a href="<?= PROOT; ?>index" class="btn btn-sm btn-outline-secondary">
+                                Menu
                             </a>
                         </div>
                     </div>
@@ -406,14 +416,10 @@
                                     <div class="col-md-4 mb-4">
                                         <label for="position">Position</label>
                                         <select name="position" id="position" class="form-control form-control-sm">
-                                            <option></option>
-                                            <option>President</option>
-                                            <option>Vice President</option>
-                                            <option>IT Chair</option>
-                                            <option>Deputy IT Chair</option>
-                                            <option>Communication Chair</option>
-                                            <option>WOCOM</option>
-                                            <option>Deputy WOCOM</option>
+                                            <option value="">...</option>
+                                            <?php foreach ($conn->query("SELECT * FROM tein_position ORDER BY position_name ASC")->fetchAll() as $row): ?>
+                                            <option <?= (($position == ucwords($row['position_name'])) ? 'selected' : ''); ?>><?= ucwords($row['position_name']); ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
 
@@ -423,6 +429,10 @@
                                     </div>
                                     <div class="mt-2 mb-2">
                                         <button type="submit" class="btn btn-sm btn-outline-secondary" name="submit" id="submit"><?= (isset($_GET['edit']))? 'Update': 'Add'; ?> Member</button>
+                                        <?php if (isset($_GET['edit'])): ?>
+                                            <br><br>
+                                            <a href="<?= PROOT; ?>members" class="button text-secondary">Cancel</a>
+                                        <?php endif ?>
                                     </div>
                                 </div>
                             </form>

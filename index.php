@@ -42,12 +42,7 @@
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
-                                <a href="account" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person"></i> Manage account</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="executives" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="positions" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-person-check"></i> Positions</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
@@ -59,6 +54,11 @@
                                 <hr aria-hidden="true" class="menu-hr">
                                 <a href="members" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-people"></i> Members</span>
+                                    <span class=""><i class="bi bi-arrow-right"></i></span>
+                                </a>
+                                <hr aria-hidden="true" class="menu-hr">
+                                <a href="account" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <span class="menu-item"><i class="bi bi-person"></i> Manage account</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">

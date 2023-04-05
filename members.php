@@ -55,10 +55,20 @@
                         </div>
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
-                                <button type="button" class="text-white" style="background-color: transparent; border: none;">...</button>
+                                <div class="dropdown">
+                                    <button  class="text-white" style="background-color: transparent; border: none;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ...
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="<?= PROOT; ?>members">Refresh</a></li>
+                                        <li><a class="dropdown-item" href="<?= PROOT; ?>positions">Position</a></li>
+                                        <li><a class="dropdown-item" href="<?= PROOT; ?>executives">Executives</a></li>
+                                        <li><a class="dropdown-item" href="<?= PROOT; ?>logout">Logout</a></li>
+                                    </ul>
+                                </div>
                             </div>
                             <a href="index" class="btn btn-sm btn-outline-secondary">
-                                Home
+                                Menu
                             </a>
                         </div>
                     </div>
@@ -80,19 +90,12 @@
                                     <th>Last Name</th>
                                     <th>Email</th>
                                     <th>Sex</th>
-                                    <th>School</th>
                                     <th>Department</th>
                                     <th>Programme</th>
                                     <th>Level</th>
-                                    <th>Year of Admission</th>
-                                    <th>Year of Completion</th>
                                     <th>Name of Hostel</th>
-                                    <th>Region</th>
-                                    <th>Constituency</th>
-                                    <th>Branch (Polling Station)</th>
                                     <th>WhatsApp Contact</th>
                                     <th>Telephone Number</th>
-                                    <th>Card Type</th>
                                     <th>Passport</th>
                                     <th>Registered Date</th>
                                     <th></th>
@@ -112,19 +115,12 @@
                                     <td><?= ucwords($row['membership_lname']); ?></td>
                                     <td><?= $row['membership_email']; ?></td>
                                     <td><?= ucwords($row['membership_sex']); ?></td>
-                                    <td><?= ucwords($row['membership_school']); ?></td>
                                     <td><?= ucwords($row['membership_department']); ?></td>
                                     <td><?= ucwords($row['membership_programme']); ?></td>
                                     <td><?= ucwords($row['membership_level']); ?></td>
-                                    <td><?= $row['membership_yoa']; ?></td>
-                                    <td><?= $row['membership_yoc']; ?></td>
                                     <td><?= ucwords($row['membership_name_of_hostel']); ?></td>
-                                    <td><?= ucwords($row['membership_region']); ?></td>
-                                    <td><?= ucwords($row['membership_constituency']); ?></td>
-                                    <td><?= ucwords($row['membership_branch']); ?></td>
                                     <td><?= $row['membership_whatsapp_contact']; ?></td>
                                     <td><?= $row['membership_telephone_number']; ?></td>
-                                    <td><?= ucwords($row['membership_card_type']); ?></td>
                                     <td>
                                         <a href="<?= $row['membership_passport']; ?>" target="_blank">
                                             <img src="<?= $row['membership_passport']; ?>" width="100" height="100" class="img-thumbnail">  
@@ -132,9 +128,96 @@
                                     </td>
                                     <td><?= pretty_date_notime($row['membership_registered_date']); ?></td>
                                     <td>
+                                        <a class="badge bg-dark text-decoration-none" href="javascript:;" data-bs-toggle="modal" data-bs-target="#memberModal<?= $row['id']; ?>">Details</a>
+                                        
                                         <a class="badge bg-secondary text-decoration-none" href="<?= PROOT; ?>add.member?edit=1&id=<?= $row['id']; ?>">Edit</a>
                                         <!-- <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>members?delete=1&id=<?= $row['id']; ?>">Delete</a> -->
                                         <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>members?permanent_delete=<?= $row['id']; ?>&uploaded_passport=<?= $row['membership_passport']; ?>">Delete</a>
+
+                                        <div class="modal fade" id="memberModal<?= $row['id']; ?>" tabindex="-1" aria-labelledby="memberModalLabel<?= $row['id']; ?>" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content" style="background: #3B3B3B;">
+                                                    <div class="modal-body text-center">
+                                                        <div>
+                                                            <?= ($row['membership_paid'] == 1) ? '<span class="badge bg-success mb-2">Paid</span>' : ''; ?>        
+                                                            <?= ($row['membership_executive'] == 'Yes') ? '<span class="badge bg-info mb-2">' . ucwords($row["membership_position"]) . '</span>' : ''; ?>
+                                                        </div>
+                                                        <img src="<?= PROOT . $row['membership_passport']; ?>" alt="" class="img-fluid rounded" style="height: 200px; width: auto; margin: 0 auto;">
+                                                        <table class="table table-sm table-bordered mt-3" style="width: auto; margin: 0 auto;">
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Identity</td>
+                                                                <td><?= $row['membership_identity']; ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Full name</td>
+                                                                <td><?= ucwords($row['membership_fname'] . ' ' . $row['membership_lname']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Email</td>
+                                                                <td><?= $row['membership_email']; ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Sex</td>
+                                                                <td><?= ucwords($row['membership_sex']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">School</td>
+                                                                <td><?= ucwords($row['membership_school']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Department</td>
+                                                                <td><?= ucwords($row['membership_department']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Programme</td>
+                                                                <td><?= ucwords($row['membership_programme']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Level</td>
+                                                                <td><?= ucwords($row['membership_level']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Year of Admission</td>
+                                                                <td><?= $row['membership_yoa']; ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Year of Completion</td>
+                                                                <td><?= $row['membership_yoc']; ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Name of Hostel</td>
+                                                                <td><?= ucwords($row['membership_name_of_hostel']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Region</td>
+                                                                <td><?= ucwords($row['membership_region']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Constituency</td>
+                                                                <td><?= ucwords($row['membership_constituency']); ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">WhatsApp Contact</td>
+                                                                <td><?= $row['membership_whatsapp_contact']; ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Telephone Number</td>
+                                                                <td><?= $row['membership_telephone_number']; ?></td>
+                                                            </tr>
+                                                            <tr class="text-white">
+                                                                <td style="color: #A7A7A7; font-weight: 700;">Card Type</td>
+                                                                <td><?= $row['membership_card_type']; ?></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Print</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </td>
                                 <?php $i++; endforeach; ?>
                                 </tr>

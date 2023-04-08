@@ -1,5 +1,8 @@
 <?php 
     require_once ("db_connection/conn.php");
+    if (!admin_is_logged_in()) {
+        admn_login_redirect();
+    }
     include ("includes/header.php");
 
     // DELETE A MEMBER PERMANENTLY
@@ -48,8 +51,8 @@
 
                             <img class="me-3" src="dist/media/logo/logo.png" alt="" width="48" height="38">
                             <div class="lh-1">
-                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;">INUWA MOHAMMED UMAR</h1>
-                                <span style="font-size: 12px; line-height: 16px;">inuwamohammedumar@tein.cktutas.org</span><br>   
+                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;"><?= strtoupper($admin_data['admin_fullname']); ?></h1>
+                                <span style="font-size: 12px; line-height: 16px;"><?= $admin_data['admin_email'] ?></span><br>   
                                 <span style="align-items: center; flex-direction: row;">😎 singed in.</span>
                             </div>
                         </div>

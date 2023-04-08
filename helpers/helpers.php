@@ -178,41 +178,41 @@ function getTitle() {
 
 // Sessions For login
 function adminLogin($admin_id) {
-	$_SESSION['ATAdmin'] = $admin_id;
+	$_SESSION['TNAdmin'] = $admin_id;
 	global $conn;
 	$data = array(
 		':admin_last_login' => date("Y-m-d H:i:s"),
 		':admin_id' => (int)$admin_id
 	);
 	$query = "
-		UPDATE asteelu_admin 
+		UPDATE tein_admin 
 		SET admin_last_login = :admin_last_login 
 		WHERE admin_id = :admin_id";
 	$statement = $conn->prepare($query);
 	$result = $statement->execute($data);
 	if (isset($result)) {
 		$_SESSION['flash_success'] = '<div class="text-center" id="temporary">You are now logged in!</div>';
-		header('Location: index');
+		redirect(PROOT . 'index');
 	}
 }
 
 function admin_is_logged_in(){
-	if (isset($_SESSION['ATAdmin']) && $_SESSION['ATAdmin'] > 0) {
+	if (isset($_SESSION['TNAdmin']) && $_SESSION['TNAdmin'] > 0) {
 		return true;
 	}
 	return false;
 }
 
 // Redirect admin if !logged in
-function admn_login_redirect($url = 'login') {
+function admn_login_redirect($url = 'signin') {
 	$_SESSION['flash_error'] = '<div class="text-center" id="temporary" style="margin-top: 60px;">You must be logged in to access that page.</div>';
-	header('Location: '.$url);
+	redirect(PROOT . 'auth/' . $url);
 }
 
 // Redirect admin if do not have permission
-function admin_permission_redirect($url = 'login') {
+function admin_permission_redirect($url = 'signin') {
 	$_SESSION['flash_error'] = '<div class="text-center" id="temporary" style="margin-top: 60px;">You do not have permission in to access that page.</div>';
-	header('Location: '.$url);
+	redirec(PROOT . 'auth/' . $url);
 }
 
 function admin_has_permission($permission = 'admin') {

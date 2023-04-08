@@ -1,5 +1,8 @@
 <?php 
     require_once ("db_connection/conn.php");
+    if (!admin_is_logged_in()) {
+        admn_login_redirect();
+    }
     include ("includes/header.php");
 
     $message = '';
@@ -37,7 +40,7 @@
                 $check = $conn->query("SELECT * FROM tein_position WHERE position_name = '".$position."' AND id != '".$id."'")->rowCount();
             }
             if ($check > 0) {
-                $message = '<div class="alert alert-danger">'.$position.' already exists.</div>';
+                $message = $position . ' already exists.';
             } else {
 
                 // code...
@@ -63,7 +66,7 @@
                 }
             }
         } else {
-            $message = '<div class="alert alert-danger">Position name required.</div>';
+            $message = 'Position name required.';
         }
     }
 
@@ -108,8 +111,8 @@
 
                             <img class="me-3" src="<?= PROOT; ?>dist/media/logo/logo.png" alt="" width="48" height="38">
                             <div class="lh-1">
-                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;">INUWA MOHAMMED UMAR</h1>
-                                <span style="font-size: 12px; line-height: 16px;">inuwamohammedumar@tein.cktutas.org</span><br>   
+                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;"><?= strtoupper($admin_data['admin_fullname']); ?></h1>
+                                <span style="font-size: 12px; line-height: 16px;"><?= $admin_data['admin_email'] ?>g</span><br>   
                                 <span style="align-items: center; flex-direction: row;">😎 singed in.</span>
                             </div>
                         </div>
@@ -126,7 +129,7 @@
                     <div class="text-white w-100 h-100" style="z-index: 5; padding: 4px 0px; margin-bottom: 20px; transition: all 0.2s ease-in-out; background: #3B3B3B; border-radius: 4px; box-shadow: 0px 1.6px 3.6px rgb(0 0 0 / 25%), 0px 0px 2.9px rgb(0 0 0 / 22%);">
                         <div class="container-fluid mt-4">
                             <div>
-                                <?= $message; ?>
+                                <code><?= $message; ?></code>
                                 <form method="POST" action="positions<?= ((isset($_GET['edit'])) ? '?edit='.(int)$_GET['edit'] : ''); ?>">
                                     <div class="mb-3">
                                         <div>

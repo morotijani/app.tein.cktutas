@@ -41,7 +41,11 @@
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
                         <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . Executives</h2>
-                        <a href="add.member" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add Member</a>
+                        <?php if (!admin_is_logged_in()): ?>
+                            <a href="<?= PROOT; ?>auth/signin" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> . Sign in</a>
+                        <?php else: ?>
+                            <a href="<?= PROOT; ?>add.member" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add Member</a>
+                        <?php endif ?>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
@@ -49,9 +53,9 @@
 
                             <img class="me-3" src="dist/media/logo/logo.png" alt="" width="48" height="38">
                             <div class="lh-1">
-                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;">INUWA MOHAMMED UMAR</h1>
-                                <span style="font-size: 12px; line-height: 16px;">inuwamohammedumar@tein.cktutas.org</span><br>   
-                                <span style="align-items: center; flex-direction: row;">😎 singed in.</span>
+                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;"><?= (!admin_is_logged_in()) ? 'TEIN - CKT-UTAS' : strtoupper($admin_data['admin_fullname']); ?></h1>
+                                <span style="font-size: 12px; line-height: 16px;"><?= (!admin_is_logged_in()) ? '@tein.cktutas.org' : $admin_data['admin_email']; ?></span><br>   
+                                <span style="align-items: center; flex-direction: row;">😎 signed in.</span>
                             </div>
                         </div>
                         <div class="btn-toolbar mb-2 mb-md-0">
@@ -131,10 +135,11 @@
                                     <td><?= pretty_date_notime($row['membership_registered_date']); ?></td>
                                     <td>
                                         <a class="badge bg-dark text-decoration-none" href="javascript:;" data-bs-toggle="modal" data-bs-target="#memberModal<?= $row['id']; ?>">Details</a>
-                                        
-                                        <a class="badge bg-secondary text-decoration-none" href="<?= PROOT; ?>add.member?edit=1&id=<?= $row['id']; ?>">Edit</a>
-                                        <!-- <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>members?delete=1&id=<?= $row['id']; ?>">Delete</a> -->
-                                        <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>members?permanent_delete=<?= $row['id']; ?>&uploaded_passport=<?= $row['membership_passport']; ?>">Delete</a>
+                                        <?php if (admin_is_logged_in()): ?>
+                                            <a class="badge bg-secondary text-decoration-none" href="<?= PROOT; ?>add.member?edit=1&id=<?= $row['id']; ?>">Edit</a>
+                                            <!-- <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>members?delete=1&id=<?= $row['id']; ?>">Delete</a> -->
+                                            <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>members?permanent_delete=<?= $row['id']; ?>&uploaded_passport=<?= $row['membership_passport']; ?>">Delete</a>
+                                        <?php endif ?>
 
                                         <div class="modal fade" id="memberModal<?= $row['id']; ?>" tabindex="-1" aria-labelledby="memberModalLabel<?= $row['id']; ?>" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">

@@ -230,9 +230,9 @@
 
                             <img class="me-3" src="dist/media/logo/logo.png" alt="" width="48" height="38">
                             <div class="lh-1">
-                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;">INUWA MOHAMMED UMAR</h1>
-                                <span style="font-size: 12px; line-height: 16px;">inuwamohammedumar@tein.cktutas.org</span><br>   
-                                <span style="align-items: center; flex-direction: row;">☺ singed in.</span>
+                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;"><?= strtoupper($admin_data['admin_fullname']); ?></h1>
+                                <span style="font-size: 12px; line-height: 16px;"><?= $admin_data['admin_email'] ?></span><br>   
+                                <span style="align-items: center; flex-direction: row;">😎 singed in.</span>
                             </div>
                         </div>
                         <div class="btn-toolbar mb-2 mb-md-0">
@@ -406,14 +406,14 @@
                                     <input type="hidden" name="uploaded_passport" id="uploaded_passport" value="<?= $passport; ?>">
 
                                     <div class="col-md-12 mb-4">
-                                        <label for="executive">Executive or Not</label>
+                                        <label for="executive">Executive/Committee Member</label>
                                         <select name="executive" id="executive">
-                                            <option></option>
-                                            <option <?= ($executive == 'No')? "selected" : ""; ?>>No</option>
-                                            <option <?= ($executive == 'Yes')? "selected" : ""; ?>>Yes</option>
+                                            <option value=""></option>
+                                            <option value="No" <?= ($executive == 'No')? "selected" : ""; ?>>No</option>
+                                            <option value="Yes" <?= ($executive == 'Yes')? "selected" : ""; ?>>Yes</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 mb-4">
+                                    <div class="col-md-4 mb-4" style="display: none">
                                         <label for="position">Position</label>
                                         <select name="position" id="position" class="form-control form-control-sm">
                                             <option value="">...</option>
@@ -443,3 +443,13 @@
         </main>
     </div>
 <?php include ("includes/footer.php"); ?>
+
+<script>
+    var card = document.getElementById("executive");
+    if (card.options[card.selectedIndex].value == 'Yes') {
+        $('#position').css('display', 'block');
+        alert("Please select a card type");
+    } else {
+        console.log('fuck')
+    }
+</script>

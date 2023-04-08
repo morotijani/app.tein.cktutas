@@ -6,7 +6,6 @@
 
     unset($_SESSION['TNAdmin']);
 
-	redirect('signin');
+    session_destroy();
 
-	
-?>
+	redirect(PROOT . 'auth/signin');

@@ -1,6 +1,10 @@
 <?php 
     require_once ("db_connection/conn.php");
+    if (!admin_is_logged_in()) {
+        admn_login_redirect();
+    }
     include ("includes/header.php");
+
 ?> 
 
 
@@ -19,9 +23,9 @@
 
                             <img class="me-3" src="dist/media/logo/logo.png" alt="" width="48" height="38">
                             <div class="lh-1">
-                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;">INUWA MOHAMMED UMAR</h1>
-                                <span style="font-size: 12px; line-height: 16px;">inuwamohammedumar@tein.cktutas.org</span><br>   
-                                <span style="align-items: center; flex-direction: row;">☺ singed in.</span>
+                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;"><?= strtoupper($admin_data['admin_fullname']); ?></h1>
+                                <span style="font-size: 12px; line-height: 16px;"><?= $admin_data['admin_email'] ?></span><br>   
+                                <span style="align-items: center; flex-direction: row;">😎 singed in.</span>
                             </div>
                         </div>
                         <div class="btn-toolbar mb-2 mb-md-0">
@@ -37,42 +41,42 @@
                     <div>
                         <div class="text-white w-100 h-100" style="z-index: 5; padding: 4px 0px; margin-bottom: 20px; transition: all 0.2s ease-in-out; background: #3B3B3B; border-radius: 4px; box-shadow: 0px 1.6px 3.6px rgb(0 0 0 / 25%), 0px 0px 2.9px rgb(0 0 0 / 22%);">
                             <ul class="list-group">
-                                <a href="index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-house"></i> Home</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
-                                <a href="positions" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="<?= PROOT; ?>positions" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-person-check"></i> Positions</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
-                                <a href="executives" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="<?= PROOT; ?>executives" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-person-check"></i> Executives</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
-                                <a href="members" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="<?= PROOT; ?>members" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-people"></i> Members</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
-                                <a href="account" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="<?= PROOT; ?>manage.account" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-person"></i> Manage account</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
-                                <a href="members" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="<?= PROOT; ?>personal.info" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-person-lock"></i> Personal info</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
-                                <a href="index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-arrow-clockwise"></i> Refresh</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
-                                <a href="auth/logout" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                <a href="<?= PROOT; ?>auth/logout" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                     <span class="menu-item"><i class="bi bi-box-arrow-left"></i> Log out</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>

@@ -8,8 +8,6 @@
 			$thisYr = substr($thisYr, -2);
 			$number = $id;
 			$number++;
-			return ($this->front . str_pad($number, 5, "0", STR_PAD_LEFT) . '/' . $thisYr);
-			
-		}
+			return ($this->front . str_pad($number, 5, "0", STR_PAD_LEFT) . '/' . $thisYr);		}
 	}
 

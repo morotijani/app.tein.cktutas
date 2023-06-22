@@ -2,7 +2,8 @@
 require_once ("db_connection/conn.php");
 
     $message = '';
-    $membership_identity = 'CKTUTAS/TEIN/001/';
+    $membership = new AllFunctions;
+    $membership_identity = $membership->generate_identity_number(1);
     $student_id = ((isset($_POST['student_id']) && !empty($_POST['student_id'])) ? sanitize($_POST['student_id']) : '');
     $fname = ((isset($_POST['fname']) && !empty($_POST['fname'])) ? sanitize($_POST['fname']) : '');
     $lname = ((isset($_POST['lname']) && !empty($_POST['lname'])) ? sanitize($_POST['lname']) : '');
@@ -30,79 +31,18 @@ require_once ("db_connection/conn.php");
      if (isset($_POST['submit'])) {
         $memberQuery = "
             SELECT * FROM tein_membership 
-            WHERE membership_email = '".$_POST['email']."'
+            WHERE membership_email = ?
         ";
         $statement = $conn->prepare($memberQuery);
-        $statement->execute();
+        $statement->execute([$email]);
         if ($statement->rowCount() > 0) {
             $message = '<div class="alert alert-danger">'.$email.' already exists.</div>';
         } else {
 
             // UPLOAD PASSPORT PICTURE TO uploadedprofile IF FIELD IS NOT EMPTY
-            if ($_POST['uploaded_passport'] == '') {
-                if (!empty($_FILES)) {
-
-                    $image_test = explode(".", $_FILES["passport"]["name"]);
-                    $image_extension = end($image_test);
-                    $image_name = md5(microtime()).'.'.$image_extension;
-
-                    $location = 'dist/media/membership/'.$image_name;
-                    move_uploaded_file($_FILES["passport"]["tmp_name"], BASEURL . $location);
-                    
-                    if ($_POST['uploaded_image'] != '') {
-                        unlink($_POST['uploaded_image']);
-                    }
-                } else {
-                    $message = '<div class="alert alert-danger">Passport Picture Can not be Empty</div>';
-                }
-            } else {
-                $location = $_POST['uploaded_passport'];
-            }
-
-            if (empty($message)) {
-                $data = array(
-                    $membership_identity, $student_id, $fname, $lname, $email, $sex, $school, $department, $programme, $level, $yoa, $yoc, $hostel, $region, $constituency, $branch, $location, $whatsapp, $telephone, $card_type, $executive, $position, $paid, $registered_date
-                );
-                $query = "
-                    INSERT INTO `tein_membership`(`membership_identity`, `membership_student_id`, `membership_fname`, `membership_lname`, `membership_email`, `membership_sex`, `membership_school`, `membership_department`, `membership_programme`, `membership_level`, `membership_yoa`, `membership_yoc`, `membership_name_of_hostel`, `membership_region`, `membership_constituency`, `membership_branch`, `membership_passport`, `membership_whatsapp_contact`, `membership_telephone_number`, `membership_card_type`, `membership_executive`, `membership_position`, `membership_paid`, `membership_registered_date`) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ";
-                $statement = $conn->prepare($query);
-                $result = $statement->execute($data);
-                if (isset($result)) {
-                    $_SESSION['flash_success'] = 'New Member successfully <span class="bg-info">Added</span>';
-                    redirect(PROOT . 'members');
-                }
-                
-            } else {
-                $message;
-            }
+            
 
         }
-    }
-
-    // Delete uploaded passport for change
-    if (isset($_GET['dpp']) && !empty($_GET['pp'])) {
-
-        $passport = $_GET['pp'];
-        $passportLocation = BASEURL . $passport;
-        unlink($passportLocation);
-        unset($passport);
-
-        $update = "
-            UPDATE tein_membership 
-            SET membership_passport = :membership_passport 
-            WHERE id =  :id
-        ";
-        $statement = $conn->prepare($update);
-        $statement->execute(
-            [
-                ':membership_passport'   => '',
-                ':id'   => (int)$_GET["mid"]
-            ]
-        );
-        $_SESSION['flash_success'] = 'Member Passport deleted, upload new one';
-        redirect(PROOT . 'add.member?edit=1&id='.(int)$_GET["mid"]);
     }
 
 ?>
@@ -133,9 +73,7 @@ require_once ("db_connection/conn.php");
                     </div>
                 </div>
 
-
-
-                 <form method="POST" enctype="multipart/form-data" action="">
+                 <form method="POST" id="membershipForm" enctype="multipart/form-data" action="">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
@@ -297,26 +235,57 @@ require_once ("db_connection/conn.php");
                         </div>
 
                         <div class="mt-2 mb-2">
-                            <button type="submit" onclick="payWithPaystack()" class="btn btn-outline-success" name="submit" id="submit">Register</button>
+                            <input type="hidden" id="ref" name="ref">
+                            <button onclick="payWithPaystack()" class="btn btn-outline-success" name="submit" id="submit">Register</button>
                         </div>
                     </div>
                 </form>
 
-
-
-
             </div>
         </div>
-
-
 
         <footer class="pt-3 mt-4 text-body-secondary border-top">
             &copy; <?= date('Y'); ?>
         </footer>
     </div>
     <?php include ("includes/footer.php"); ?>
-    <script src="<?= PROOT; ?>dist/js/paystack.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script> 
+    <script>
+        const paymentForm = document.getElementById('membershipForm');
+        paymentForm.addEventListener("submit", payWithPaystack, false);
+
+        function payWithPaystack() {
+            //e.preventDefault();
+
+            let handler = PaystackPop.setup({
+                key: '<?php echo PAYSTACK_PUBLIC_KEY; ?>', // Replace with your public key
+                email: document.getElementById("email").value,
+                // amount: document.getElementById("amount").value * 100,
+                amount: 20 * 100,
+                ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                // label: "Optional string that replaces customer email"
+                currency: 'GHS',
+                channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'], 
+                onClose: function() {
+                  alert('Window closed.');
+                },
+                callback: function(response) {
+                    $('#ref').val(response.reference);
+                    var $this = $('#membershipForm');
+                    $.ajax({
+                        url : 'controller/add.member.verify.payment.php',
+                        method : 'POST',
+                        data : $(this).serialize(),
+                        success : function(data) {}
+                    });
+                    let message = 'Payment complete! Reference: ' + response.reference;
+                    alert(message);
+                }
+            });
+
+            handler.openIframe();
+        }
+    </script>
 
 </body>
 </html>

@@ -413,7 +413,7 @@
                                             <option value="Yes" <?= ($executive == 'Yes')? "selected" : ""; ?>>Yes</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 mb-4" style="display: none">
+                                    <div class="col-md-4 mb-4 position" style="display: <?= ((isset($_GET['edit']) && $executive == 'Yes') ? 'block' : 'none'); ?>">
                                         <label for="position">Position</label>
                                         <select name="position" id="position" class="form-control form-control-sm">
                                             <option value="">...</option>
@@ -445,11 +445,19 @@
 <?php include ("includes/footer.php"); ?>
 
 <script>
-    var card = document.getElementById("executive");
-    if (card.options[card.selectedIndex].value == 'Yes') {
-        $('#position').css('display', 'block');
-        alert("Please select a card type");
-    } else {
-        console.log('fuck')
-    }
+    $(document).ready(function() {
+
+        // if member is an executive or not
+        $("#executive").change(function() {
+            if ($("#executive").val() == 'Yes') {
+                $('.position').css('display', 'block');
+            } else {
+                // $('#position[option]').attr('selected', false);
+                $('#position').val('');
+                $('.position').css('display', 'none');
+                return  false;
+            }
+        })
+
+    })
 </script>

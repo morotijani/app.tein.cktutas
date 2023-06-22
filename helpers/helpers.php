@@ -62,6 +62,14 @@ function issetElse($array, $key, $default = "") {
     return $array[$key];
 }
 
+function js_alert($msg) {
+	return '<script>alert("' . $msg . '");</script>';
+}
+
+function php_url_slug($string) {
+ 	$slug = preg_replace('/[^a-z0-9-]+/', '-', trim(strtolower($string)));
+ 	return $slug;
+}
 
 
 

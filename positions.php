@@ -161,8 +161,8 @@
                                         <td>
                                             <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>positions?delete=<?= $row['id']; ?>">Delete</a>
                                         </td>
-                                    <?php $i++; endforeach; ?>
                                     </tr>
+                                    <?php $i++; endforeach; ?>
                                 </tbody>
                             </table>
                         </div>

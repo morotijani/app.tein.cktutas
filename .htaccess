@@ -1,10 +1,6 @@
 RewriteEngine on
 
-RewriteRule ^products/([0-9a-zA-Z]+)$ products.php?pid=$1 [NC,L]
-
-RewriteRule ^category/([0-9a-zA-Z]+)$ category.php?cid=$1 [NC,L]
-
-RewriteRule ^verified/([0-9a-zA-Z]+)$ verified.php?vericode=$1 [NC,L]
+RewriteRule ^blog/([0-9a-zA-Z]+)$ blog.php?type=$1 [NC,L]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 

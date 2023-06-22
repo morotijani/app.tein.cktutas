@@ -39,34 +39,51 @@
                     </div>
 
                     <div>
-                        <div class="text-white w-100 h-100" style="z-index: 5; padding: 4px 0px; margin-bottom: 20px; transition: all 0.2s ease-in-out; background: #3B3B3B; border-radius: 4px; box-shadow: 0px 1.6px 3.6px rgb(0 0 0 / 25%), 0px 0px 2.9px rgb(0 0 0 / 22%);">
-                            <ul class="list-group">
-                                <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-house"></i> Home</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>positions" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-tag"></i> Categories</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>members" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-building-add"></i> Add news</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>executives" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-eye-fill"></i> View all news</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>blog" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-arrow-90deg-left"></i> Go back</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                            </ul>
-                        </div>
+                        <?php if (isset($_GET['type'])): ?>
+                        <?php if ($_GET['type'] == 'all'): ?>
+                            all post
+                        <?php elseif ($_GET['type'] == 'id'): ?>
+                            single view
+                        <?php elseif ($_GET['type'] == 'category'): ?>
+                            category
+                        <?php elseif ($_GET['type'] == 'add'): ?>
+                            add
+                        <?php endif; ?>
+                        <?php else: ?>
+                            <div class="text-white w-100 h-100" style="z-index: 5; padding: 4px 0px; margin-bottom: 20px; transition: all 0.2s ease-in-out; background: #3B3B3B; border-radius: 4px; box-shadow: 0px 1.6px 3.6px rgb(0 0 0 / 25%), 0px 0px 2.9px rgb(0 0 0 / 22%);">
+                                <ul class="list-group">
+                                    <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                        <span class="menu-item"><i class="bi bi-house"></i> Home</span>
+                                        <span class=""><i class="bi bi-arrow-right"></i></span>
+                                    </a>
+                                    <hr aria-hidden="true" class="menu-hr">
+                                    <a href="<?= PROOT; ?>blog/category" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                        <span class="menu-item"><i class="bi bi-tag"></i> Categories</span>
+                                        <span class=""><i class="bi bi-arrow-right"></i></span>
+                                    </a>
+                                    <hr aria-hidden="true" class="menu-hr">
+                                    <a href="<?= PROOT; ?>blog/add" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                        <span class="menu-item"><i class="bi bi-building-add"></i> Add news</span>
+                                        <span class=""><i class="bi bi-arrow-right"></i></span>
+                                    </a>
+                                    <hr aria-hidden="true" class="menu-hr">
+                                    <a href="<?= PROOT; ?>blog/all" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                        <span class="menu-item"><i class="bi bi-eye-fill"></i> View all news</span>
+                                        <span class=""><i class="bi bi-arrow-right"></i></span>
+                                    </a>
+                                    <hr aria-hidden="true" class="menu-hr">
+                                    <a href="<?= PROOT; ?>blog" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                        <span class="menu-item"><i class="bi bi-arrow-clockwise"></i> Refresh</span>
+                                        <span class=""><i class="bi bi-arrow-right"></i></span>
+                                    </a>
+                                    <hr aria-hidden="true" class="menu-hr">
+                                    <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                        <span class="menu-item"><i class="bi bi-arrow-90deg-left"></i> Go back</span>
+                                        <span class=""><i class="bi bi-arrow-right"></i></span>
+                                    </a>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                 </div>

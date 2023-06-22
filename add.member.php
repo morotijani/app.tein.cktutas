@@ -3,7 +3,7 @@
     include ("includes/header.php");
 
     $message = '';
-    $membership_identity = 'CKT-UTAS/TEIN/001';
+    $membership_identity = 'CKTUTAS/TEIN/001/';
     $student_id = ((isset($_POST['student_id']) && !empty($_POST['student_id'])) ? sanitize($_POST['student_id']) : '');
     $fname = ((isset($_POST['fname']) && !empty($_POST['fname'])) ? sanitize($_POST['fname']) : '');
     $lname = ((isset($_POST['lname']) && !empty($_POST['lname'])) ? sanitize($_POST['lname']) : '');

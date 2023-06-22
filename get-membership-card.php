@@ -1,6 +1,110 @@
 <?php
 require_once ("db_connection/conn.php");
 
+    $message = '';
+    $membership_identity = 'CKTUTAS/TEIN/001/';
+    $student_id = ((isset($_POST['student_id']) && !empty($_POST['student_id'])) ? sanitize($_POST['student_id']) : '');
+    $fname = ((isset($_POST['fname']) && !empty($_POST['fname'])) ? sanitize($_POST['fname']) : '');
+    $lname = ((isset($_POST['lname']) && !empty($_POST['lname'])) ? sanitize($_POST['lname']) : '');
+    $email = ((isset($_POST['email']) && !empty($_POST['email'])) ? sanitize($_POST['email']) : '');
+    $sex = ((isset($_POST['sex']) && !empty($_POST['sex'])) ? sanitize($_POST['sex']) : '');
+    $school = ((isset($_POST['school']) && !empty($_POST['school'])) ? sanitize($_POST['school']) : '');
+    $department = ((isset($_POST['department']) && !empty($_POST['department'])) ? sanitize($_POST['department']) : '');
+    $programme = ((isset($_POST['programme']) && !empty($_POST['programme'])) ? sanitize($_POST['programme']) : '');
+    $level = ((isset($_POST['level']) && !empty($_POST['level'])) ? sanitize($_POST['level']) : '');
+    $yoa = ((isset($_POST['yoa']) && !empty($_POST['yoa'])) ? sanitize($_POST['yoa']) : '');
+    $yoc = ((isset($_POST['yoc']) && !empty($_POST['yoc'])) ? sanitize($_POST['yoc']) : '');
+    $hostel = ((isset($_POST['hostel']) && !empty($_POST['hostel'])) ? sanitize($_POST['hostel']) : '');
+    $region = ((isset($_POST['region']) && !empty($_POST['region'])) ? sanitize($_POST['region']) : '');
+    $constituency = ((isset($_POST['constituency']) && !empty($_POST['constituency'])) ? sanitize($_POST['constituency']) : '');
+    $branch = ((isset($_POST['branch']) && !empty($_POST['branch'])) ? sanitize($_POST['branch']) : '');
+    $whatsapp = ((isset($_POST['whatsapp']) && !empty($_POST['whatsapp'])) ? sanitize($_POST['whatsapp']) : '');
+    $telephone = ((isset($_POST['telephone']) && !empty($_POST['telephone'])) ? sanitize($_POST['telephone']) : '');
+    $card_type = ((isset($_POST['card_type']) && !empty($_POST['card_type'])) ? sanitize($_POST['card_type']) : '');
+    $executive = ((isset($_POST['executive']) && !empty($_POST['executive'])) ? sanitize($_POST['executive']) : '');
+    $position = ((isset($_POST['position']) && !empty($_POST['position'])) ? sanitize($_POST['position']) : '');
+    $registered_date = date("Y-m-d H:i:s A");
+    $passport = '';
+
+
+     if (isset($_POST['submit'])) {
+        $memberQuery = "
+            SELECT * FROM tein_membership 
+            WHERE membership_email = '".$_POST['email']."'
+        ";
+        $statement = $conn->prepare($memberQuery);
+        $statement->execute();
+        if ($statement->rowCount() > 0) {
+            $message = '<div class="alert alert-danger">'.$email.' already exists.</div>';
+        } else {
+
+            // UPLOAD PASSPORT PICTURE TO uploadedprofile IF FIELD IS NOT EMPTY
+            if ($_POST['uploaded_passport'] == '') {
+                if (!empty($_FILES)) {
+
+                    $image_test = explode(".", $_FILES["passport"]["name"]);
+                    $image_extension = end($image_test);
+                    $image_name = md5(microtime()).'.'.$image_extension;
+
+                    $location = 'dist/media/membership/'.$image_name;
+                    move_uploaded_file($_FILES["passport"]["tmp_name"], BASEURL . $location);
+                    
+                    if ($_POST['uploaded_image'] != '') {
+                        unlink($_POST['uploaded_image']);
+                    }
+                } else {
+                    $message = '<div class="alert alert-danger">Passport Picture Can not be Empty</div>';
+                }
+            } else {
+                $location = $_POST['uploaded_passport'];
+            }
+
+            if (empty($message)) {
+                $data = array(
+                    $membership_identity, $student_id, $fname, $lname, $email, $sex, $school, $department, $programme, $level, $yoa, $yoc, $hostel, $region, $constituency, $branch, $location, $whatsapp, $telephone, $card_type, $executive, $position, $paid, $registered_date
+                );
+                $query = "
+                    INSERT INTO `tein_membership`(`membership_identity`, `membership_student_id`, `membership_fname`, `membership_lname`, `membership_email`, `membership_sex`, `membership_school`, `membership_department`, `membership_programme`, `membership_level`, `membership_yoa`, `membership_yoc`, `membership_name_of_hostel`, `membership_region`, `membership_constituency`, `membership_branch`, `membership_passport`, `membership_whatsapp_contact`, `membership_telephone_number`, `membership_card_type`, `membership_executive`, `membership_position`, `membership_paid`, `membership_registered_date`) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ";
+                $statement = $conn->prepare($query);
+                $result = $statement->execute($data);
+                if (isset($result)) {
+                    $_SESSION['flash_success'] = 'New Member successfully <span class="bg-info">Added</span>';
+                    redirect(PROOT . 'members');
+                }
+                
+            } else {
+                $message;
+            }
+
+        }
+    }
+
+    // Delete uploaded passport for change
+    if (isset($_GET['dpp']) && !empty($_GET['pp'])) {
+
+        $passport = $_GET['pp'];
+        $passportLocation = BASEURL . $passport;
+        unlink($passportLocation);
+        unset($passport);
+
+        $update = "
+            UPDATE tein_membership 
+            SET membership_passport = :membership_passport 
+            WHERE id =  :id
+        ";
+        $statement = $conn->prepare($update);
+        $statement->execute(
+            [
+                ':membership_passport'   => '',
+                ':id'   => (int)$_GET["mid"]
+            ]
+        );
+        $_SESSION['flash_success'] = 'Member Passport deleted, upload new one';
+        redirect(PROOT . 'add.member?edit=1&id='.(int)$_GET["mid"]);
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,41 +132,191 @@ require_once ("db_connection/conn.php");
                         <a href="news/">go back</a>
                     </div>
                 </div>
-            
-            <form>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-          </div>
-          <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-          </div>
 
-          <div class="form-floating mb-3">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-      <label for="floatingInput">Email address</label>
-    </div>
-    <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-      <label for="floatingPassword">Password</label>
-</div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-      </div>
-    </div>
+
+
+                 <form method="POST" enctype="multipart/form-data" action="">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="student_id" id="student_id" placeholder="Student Id" value="<?= $student_id; ?>">
+                                <label for="student_id">Student Id</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name" value="<?= $fname; ?>">
+                                <label for="fname">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name" value="<?= $lname; ?>">
+                                <label for="lname">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="email" id="email" placeholder="Email" value="<?= $email; ?>">
+                                <label for="email">Email</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <select type="text" class="form-select" name="sex" id="sex">
+                                    <option value="">...</option>
+                                    <option <?= ($sex == 'Male')? "selected" : ""; ?>>Male</option>
+                                    <option <?= ($sex == 'Female')? "selected" : ""; ?>>Female</option>
+                                    <option <?= ($sex == 'Other')? "selected" : ""; ?>>Other</option>
+                                </select>
+                                <label for="sex">Sex</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="school" id="school" placeholder="School" value="<?= $school ?>">
+                                <label for="school">School</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="department" id="department" placeholder="Department" value="<?= $department ?>">
+                                <label for="department">Department</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="programme" id="programme" placeholder="Programme" value="<?= $programme ?>">
+                                <label for="programme">Programme</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <select type="text" class="form-select" name="level" id="level">
+                                    <option value="">...</option>
+                                    <option <?= ($level == 'L100')? "selected" : ""; ?>>L100</option>
+                                    <option <?= ($level == 'L200')? "selected" : ""; ?>>L200</option>
+                                    <option <?= ($level == 'L300')? "selected" : ""; ?>>L300</option>
+                                    <option <?= ($level == 'L400')? "selected" : ""; ?>>L400</option>
+                                </select>
+                                <label for="level">Level</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input type="number" min="1900" max="<?= date('Y');?>" step="1" class="form-control form-control-sm" name="yoa" placeholder="Year of Admission" id="yoa" value="<?= $yoa; ?>">
+                                <label for="yoa">Year of Admission</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" min="1900" max="<?= date('Y') - 1;?>" step="1" class="form-control form-control-sm" name="yoc" id="yoc" placeholder="Year of Completion" value="<?= $yoc; ?>">
+                                <label for="yoc">Year of Completion</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control form-control-sm" name="hostel" id="hostel" placeholder="Name of Hostel" value="<?= $hostel; ?>">
+                                <label for="hostel">Name of Hostel</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="region" id="region" placeholder="Region" value="<?= $region; ?>">
+                                <label for="region">Region</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="constituency" id="constituency" placeholder="Constituency" value="<?= $constituency; ?>">
+                                <label for="constituency">Constituency</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="branch" id="branch"  placeholder="Branch (Polling Station)" value="<?= $branch; ?>">
+                                <label for="branch">Branch (Polling Station)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="WhatsApp Contact" value="<?= $whatsapp; ?>">
+                                <label for="whatsapp">WhatsApp Contact</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" name="telephone" id="telephone" placeholder="Telephone" value="<?= $telephone; ?>">
+                                <label for="telephone">Telephone Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <select type="text" class="form-select" name="card_type" id="card_type" value="<?= $card_type; ?>">
+                                    <option value="">...</option>
+                                    <option <?= ($card_type == 'Plastic')? "selected" : ""; ?>>Plastic</option>
+                                    <option <?= ($card_type == 'Booklet')? "selected" : ""; ?>>Booklet</option>
+                                </select>
+                                <label for="card_type">Card Type</label>
+                            </div>
+                        </div>
+
+                        <?php if ($passport != ''): ?>
+                        <div class="mb-3">
+                            <label>Product Image</label><br>
+                            <img src="<?= $passport; ?>" class="img-fluid img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;">
+                            <a href="<?= PROOT; ?>add.member?dpp=1&mid=<?= $edit_id; ?>&pp=<?= $passport; ?>" class="badge bg-danger">Change Image</a>
+                        </div>
+                        <?php else: ?>
+                        <div class="mb-3">
+                            <div>
+                                <label for="passport" class="form-label">Passpot size Image</label>
+                                <input type="file" class="form-control" id="passport" name="passport" required>
+                                <span id="upload_file"></span>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <input type="hidden" name="uploaded_passport" id="uploaded_passport" value="<?= $passport; ?>">
+
+                        <div class="col-md-12 mb-4">
+                            <label for="executive">Executive/Committee Member</label>
+                            <select name="executive" id="executive">
+                                <option value=""></option>
+                                <option value="No" <?= ($executive == 'No')? "selected" : ""; ?>>No</option>
+                                <option value="Yes" <?= ($executive == 'Yes')? "selected" : ""; ?>>Yes</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-4 position" style="display: <?= ((isset($_GET['edit']) && $executive == 'Yes') ? 'block' : 'none'); ?>">
+                            <label for="position">Position</label>
+                            <select name="position" id="position" class="form-control form-control-sm">
+                                <option value="">...</option>
+                                <?php foreach ($conn->query("SELECT * FROM tein_position ORDER BY position_name ASC")->fetchAll() as $row): ?>
+                                <option <?= (($position == ucwords($row['position_name'])) ? 'selected' : ''); ?>><?= ucwords($row['position_name']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="mt-2 mb-2">
+                            <button type="submit" onclick="payWithPaystack()" class="btn btn-outline-success" name="submit" id="submit">Register</button>
+                        </div>
+                    </div>
+                </form>
+
+
+
+
+            </div>
+        </div>
 
 
 
         <footer class="pt-3 mt-4 text-body-secondary border-top">
-            &copy; 2023
+            &copy; <?= date('Y'); ?>
         </footer>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <?php include ("includes/footer.php"); ?>
+    <script src="<?= PROOT; ?>dist/js/paystack.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script> 
+
 </body>
 </html>

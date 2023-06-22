@@ -1,5 +1,12 @@
 <?php 
 
+function dnd($data) {
+	echo '<pre>';
+	var_dump($data);
+	echo '</pre>';
+	die;
+}
+
 // Make Date Readable
 function pretty_date($date){
 	return date("M d, Y h:i A", strtotime($date));

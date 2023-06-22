@@ -14,8 +14,8 @@
                 <div class="col-md-4">
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
-                        <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . Dashboard</h2>
-                        <a href="add.member" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add Member</a>
+                        <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . News Dashboard</h2>
+                        <a href="add.member" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add News</a>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
@@ -47,42 +47,22 @@
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
                                 <a href="<?= PROOT; ?>positions" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person-check"></i> Positions</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>executives" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person-check"></i> Executives</span>
+                                    <span class="menu-item"><i class="bi bi-tag"></i> Categories</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
                                 <a href="<?= PROOT; ?>members" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-people"></i> Members</span>
+                                    <span class="menu-item"><i class="bi bi-building-add"></i> Add news</span>
+                                    <span class=""><i class="bi bi-arrow-right"></i></span>
+                                </a>
+                                <hr aria-hidden="true" class="menu-hr">
+                                <a href="<?= PROOT; ?>executives" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <span class="menu-item"><i class="bi bi-eye-fill"></i> View all news</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                                 <hr aria-hidden="true" class="menu-hr">
                                 <a href="<?= PROOT; ?>blog" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-newspaper"></i> News</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>manage.account" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person"></i> Manage account</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>personal.info" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person-lock"></i> Personal info</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-arrow-clockwise"></i> Refresh</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>auth/logout" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-box-arrow-left"></i> Log out</span>
+                                    <span class="menu-item"><i class="bi bi-arrow-90deg-left"></i> Go back</span>
                                     <span class=""><i class="bi bi-arrow-right"></i></span>
                                 </a>
                             </ul>

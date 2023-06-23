@@ -165,6 +165,14 @@
 ?> 
 
     <?= $flash; ?>
+    <style>
+        .tox .tox-dialog {
+/*            background-color: rgb(51, 51, 51);*/
+        }
+        .tox .tox-dialog input {
+            color: #000 !important;
+        }
+    </style>
     <div class="container-fluid">
         <main style="background-color: rgb(51, 51, 51);">
             <div class="row justify-content-center">
@@ -172,7 +180,7 @@
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
                         <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . News Dashboard</h2>
-                        <a href="<?= PROOT; ?>blog/add" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add News</a>
+                        <a href="<?= PROOT; ?>blog/<?= ((!isset($_GET['type'])) ? 'add' : 'all'); ?>" class="btn btn-sm btn-outline-secondary" style="background: #333333;"><?= ((!isset($_GET['type'])) ? ' + Add' : ' * All'); ?> News</a>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
@@ -205,7 +213,7 @@
                             <?php if (isset($_GET['type'])): ?>
                             <?php if ($_GET['type'] == 'all'): ?>
                                 <div class="container-fluid mt-4">
-                                    <table class="table table-sm text-white table-bordered my-4">
+                                    <table class="table table text-white table-bordered my-4">
                                         <thead>
                                             <tr style="color: #A7A7A7; font-weight: 700;">
                                                 <th></th>
@@ -277,7 +285,7 @@
                                             <select type="text" class="form-control form-control-sm" name="news_category" id="news_category" required>
                                                <option value="" <?= (($news_category == '') ? 'selected' : ''); ?>>...</option>
                                                 <?php foreach ($Category->listCategory($conn) as $category_row): ?>
-                                                    <option value="<?= $category_row['id']; ?>" <?= (($news_category == $category_row['id']) ? 'selected' : ''); ?>><?= $category_row['category']; ?></option>
+                                                    <option value="<?= $category_row['id']; ?>" <?= (($news_category == $category_row['id']) ? 'selected' : ''); ?>><?= ucwords($category_row['category']); ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
@@ -358,16 +366,12 @@
     </div>
 
 <?php include ("includes/footer.php"); ?>
-    <!-- <script type="text/javascript" src="<?= PROOT; ?>dist/js/tinymce-no-api-key.min.js"></script> -->
-    <!-- <script src="https://cdn.tiny.cloud/1/87lq0a69wq228bimapgxuc63s4akao59p3y5jhz37x50zpjk/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
+    <script src="https://cdn.tiny.cloud/1/87lq0a69wq228bimapgxuc63s4akao59p3y5jhz37x50zpjk/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript">
-        // Testarea Editor
-        // tinymce.init({
-        //     selector: '#product_description',
-        // });
-
         tinymce.init({ 
             selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
             setup: function (editor) {
                 editor.on('change', function (e) {
                     editor.save();

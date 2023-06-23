@@ -38,7 +38,7 @@
 
 								<div class='modal fade' id='deleteModal" . $this->i . "' tabindex='-1' aria-labelledby='subscribeModalLabel' aria-hidden='true'>
 								  	<div class='modal-dialog modal-dialog-centered modal-sm'>
-								    	<div class='modal-content' style='background-color: rgb(51, 51, 51)'>
+								    	<div class='modal-content' style='background-color: rgb(51, 51, 51);'>
 								    		<div class='modal-body'>
 								      			<p>When you delete this categoy, all news and details under it will be deleted as well.</p>
 								        		<button type='button' class='btn btn-sm btn-secondary' data-bs-dismiss='modal'>Close</button>

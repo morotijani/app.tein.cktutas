@@ -46,7 +46,7 @@
                     INSERT INTO tein_category (category, category_url) 
                     VALUES (?, ?)
                 ";
-                if (isset($_GET['status']) && $_GET['status'] == 'edit') {
+                if (isset($_GET['status']) && $_GET['status'] == 'edit_category') {
                     $q = "
                         UPDATE tein_category 
                         SET category = ?, category_url = ?
@@ -56,7 +56,7 @@
                 $statement = $conn->prepare($q);
                 $result = $statement->execute([$category, $category_url]);
                 if (isset($result)) {
-                    $_SESSION['flash_success'] = ucwords($category) . ' successfully ' . ((isset($_GET['status']) && $_GET['status'] == 'edit') ? 'updated' : 'added') . '!';        
+                    $_SESSION['flash_success'] = ucwords($category) . ' successfully ' . ((isset($_GET['status']) && $_GET['status'] == 'edit_category') ? 'updated' : 'added') . '!';        
                     redirect(PROOT . 'blog/category');
                 } else {
                     echo js_alert('Something went wrong, please try again');
@@ -83,6 +83,23 @@
 
 
 
+    /*
+    * FEATURE news
+    * 
+     */
+    if (isset($_GET['status']) && $_GET['status'] == 'featured' && !empty($_GET['id']) && !empty($_GET['featured'])) {
+        $_GET['featured'] = (($_GET['featured'] == 2) ? 0 : $_GET['featured']);
+        // dnd($_GET['featured']);
+        $feature = $News->featuredNews($conn, (int)$_GET['featured'], (int)$_GET['id']);
+        if ($feature) {
+            $_SESSION['flash_success'] = 'News ' . (($_GET['featured'] == 0) ? 'un-featured' : 'featured') . ' successfully!';
+            redirect(PROOT . 'blog/all');
+        } else {
+            $_SESSION['flash_error'] = 'Something went wrong, please try again!';
+            redirect(PROOT . 'blog/all');
+        }
+    }
+    
     /*
     * NEWS
     * 
@@ -117,7 +134,7 @@
         }
     }
 
-    if (isset($_POST['submitCategory'])) {
+    if (isset($_POST['submitNews'])) {
         // UPLOAD PASSPORT PICTURE TO uploadedprofile IF FIELD IS NOT EMPTY
         if ($_POST['uploaded_news_media'] == '') {
             if (!empty($_FILES)) {
@@ -143,7 +160,7 @@
             INSERT INTO `tein_news`(`news_title`, `news_url`, `news_content`, `news_media`, `news_category`, `news_created_by`) 
             VALUES (?, ?, ?, ?, ?, ?)
         ";
-        if (isset($_GET['status']) && $_GET['status'] == 'edit') {
+        if (isset($_GET['status']) && $_GET['status'] == 'edit_news') {
             $query = "
                 UPDATE tein_news 
                 SET news_title = ?, news_url = ?,  news_content = ?,  news_media = ?,  news_category = ?, news_created_by = ?
@@ -153,7 +170,7 @@
         $statement = $conn->prepare($query);
         $result = $statement->execute([$news_title, $news_url, $news_content, $news_media, $news_category, $news_created_by]);
         if (isset($result)) {
-            $_SESSION['flash_success'] = ucwords($news_title) . ' successfully ' . ((isset($_GET['status']) && $_GET['status'] == 'edit') ? 'updated' : 'added') . '!';        
+            $_SESSION['flash_success'] = ucwords($news_title) . ' successfully ' . ((isset($_GET['status']) && $_GET['status'] == 'edit_news') ? 'updated' : 'added') . '!';        
             redirect(PROOT . 'blog/all');
         } else {
             echo js_alert('Something went wrong, please try again');
@@ -233,7 +250,7 @@
                                     <div class="container-fluid mt-4">
                                         <div>
                                             <code><?= $message; ?></code>
-                                            <form method="POST" action="<?= ((isset($_GET['status']) && $_GET['status'] == 'edit') ? '?edit=' . (int)$_GET['id'] : ''); ?>">
+                                            <form method="POST" action="<?= ((isset($_GET['status']) && $_GET['status'] == 'edit_category') ? '?edit_category=' . (int)$_GET['id'] : ''); ?>">
                                                 <div class="mb-3">
                                                     <div>
                                                         <label for="category" class="form-label">Category</label>
@@ -269,7 +286,7 @@
                                     <!-- ADD NEWS -->
                                     <div class="container-fluid mt-4">
                                         <?= $message; ?>
-                                        <form method="POST" enctype="multipart/form-data" action="<?= ((isset($_GET['status']) && $_GET['status'] == 'edit') ? '?edit=1&id=' . (int)$_GET['id'] : ''); ?>">
+                                        <form method="POST" enctype="multipart/form-data" action="<?= ((isset($_GET['status']) && $_GET['status'] == 'edit_news') ? '?edit_news=' . (int)$_GET['id'] : ''); ?>">
                                             <div class="mb-3">
                                                 <label for="news_title">Heading</label>
                                                 <input type="text" class="form-control form-control-sm" name="news_title" id="news_title" value="<?= $news_title; ?>" required>
@@ -309,7 +326,7 @@
                                             <input type="hidden" name="uploaded_news_media" id="uploaded_news_media" value="<?= $news_media; ?>">
 
                                             <div class="mt-2 mb-3">
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary" name="submitCategory" id="submitCategory"><?= (isset($_GET['edit']))? 'Update': 'Create'; ?> News</button>
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary" name="submitNews" id="submitNews"><?= (isset($_GET['status']) && $_GET['status'] == 'edit_news') ? 'Update': 'Create'; ?> News</button>
                                                 <?php if (isset($_GET['status']) && $_GET['status'] == 'edit_news'): ?>
                                                     <br><br>
                                                     <a href="<?= PROOT; ?>blog/all" class="button text-secondary">Cancel</a>
@@ -317,7 +334,19 @@
                                             </div>
                                         </form>
                                     </div>
-
+                                    <script src="https://cdn.tiny.cloud/1/87lq0a69wq228bimapgxuc63s4akao59p3y5jhz37x50zpjk/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+                                    <script type="text/javascript">
+                                        tinymce.init({ 
+                                            selector: 'textarea',
+                                            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                                            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                                            setup: function (editor) {
+                                                editor.on('change', function (e) {
+                                                    editor.save();
+                                                });
+                                            }
+                                        });
+                                    </script>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <ul class="list-group">
@@ -361,16 +390,4 @@
     </div>
 
 <?php include ("includes/footer.php"); ?>
-    <script src="https://cdn.tiny.cloud/1/87lq0a69wq228bimapgxuc63s4akao59p3y5jhz37x50zpjk/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script type="text/javascript">
-        tinymce.init({ 
-            selector: 'textarea',
-            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-            setup: function (editor) {
-                editor.on('change', function (e) {
-                    editor.save();
-                });
-            }
-        });
-    </script>
+

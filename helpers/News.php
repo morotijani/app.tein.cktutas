@@ -104,19 +104,22 @@
 		private function get_number_of_featured($conn) {
 			$query = " 
 				SELECT * FROM tein_news 
-				WHERE news_featured = 1 
+				WHERE news_featured = ? 
 			";
 			$statement = $conn->prepare($query);
-			$statement->execute();
+			$statement->execute([1]);
 
 			return $statement->rowCount();
 		}
 
 		public function featuredNews($conn, $feature, $id) {
-			$featured = $this->get_number_of_featured($conn);
+			$featured = 0;
+			if ($feature != 0) {
+				$featured = $this->get_number_of_featured($conn);
+			}
 			$news = $this->findNews($conn, $id);
-			if ($news > 0) {
-				if ($featured <= 3) {
+			if ($featured < 3) {
+				if ($news > 0) {
 					// code...
 			        $query = "
 			        	UPDATE tein_news 
@@ -145,6 +148,47 @@
 	        return $result;
 		}
 
+
+		public function fetchNews($conn) {
+			$query = "
+				SELECT *, tein_news.id AS news_id FROM tein_news 
+				INNER JOIN tein_category 
+				ON tein_category.id = tein_news.news_category
+				WHERE tein_news.news_status = ? 
+				ORDER BY tein_news.createdAt ASC
+			";
+			$statement = $conn->prepare($query);
+			$statement->execute([0]);
+			$rows = $statement->fetchAll();
+
+			foreach ($rows as $row) {
+				$this->output .= '
+					<div class="col-sm-6 col-lg-6 mb-4">
+					    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+					        <div class="col-auto d-none d-lg-block">
+					        	<img src="' . PROOT . $row["news_media"]. '" class="img-fluid" width="100%" height="100%">
+					        </div>
+					        <div class="col p-4 d-flex flex-column position-static">
+					          	<strong class="d-inline-block mb-2 text-success-emphasis">' . ucwords($row["category"]) . '</strong>
+					          	<h3 class="mb-0">' . $row["news_title"] . '</h3>
+					          	<div class="mb-1 text-body-secondary">Nov 11</div>
+					          	<p class="mb-auto">' . substr($row['news_content'], 0, 90) . ' ...</p>
+					          	<a href="' . PROOT . 'news/' . $row["news_id"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
+					            	Continue reading
+					            	<svg class="bi"><use xlink:href="#chevron-right"/></svg>
+					          	</a>
+					        </div>
+					    </div>
+					</div>
+				';
+			}
+
+			return $this->output;
+		}
+		
+		public function fetchFeaturedNews($conn) {
+			
+		}
 
 
 	}

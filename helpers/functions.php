@@ -1,7 +1,7 @@
 <?php 
 
 	class AllFunctions {
-		public $front = 'CKTUTAS/TEIN/';
+		private $front = 'CKTUTAS/TEIN/';
 		
 		public function generate_identity_number($id) {
 			$thisYr = date("y");

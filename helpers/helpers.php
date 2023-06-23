@@ -1,12 +1,5 @@
 <?php 
 
-function dnd($data) {
-	echo '<pre>';
-	var_dump($data);
-	echo '</pre>';
-	die;
-}
-
 // Make Date Readable
 function pretty_date($date){
 	return date("M d, Y h:i A", strtotime($date));
@@ -62,15 +55,11 @@ function issetElse($array, $key, $default = "") {
     return $array[$key];
 }
 
-function js_alert($msg) {
-	return '<script>alert("' . $msg . '");</script>';
-}
-
+//
 function php_url_slug($string) {
  	$slug = preg_replace('/[^a-z0-9-]+/', '-', trim(strtolower($string)));
  	return $slug;
 }
-
 
 
 
@@ -357,6 +346,96 @@ function get_all_product($product_trash = '') {
 	return $output;
 }
 
+// GET ALL CATEGORIES
+function get_all_category($category_trash = 0) {
+	global $conn;
+	$output = '';
+
+	$query = "
+		SELECT * FROM asteelu_category 
+		WHERE category_trash = :category_trash 
+		ORDER BY category_id DESC
+	";
+	$statement = $conn->prepare($query);
+	$statement->execute([
+		':category_trash' => $category_trash
+	]);
+	$result = $statement->fetchAll();
+	$count_row = $statement->rowCount();
+
+	if ($count_row > 0) {
+		foreach ($result as $row) {
+			$output .= '
+				<tr>
+					<td>';
+					if ($category_trash == 0) {
+						$output .= '
+							<a href="category?edit='.$row["category_id"].'" class="btn btn-sm btn-secondary"><i data-feather="edit"></i></a>
+						';
+					} else {
+						$output .= '
+							<a href="category?restore='.$row["category_id"].'" class="btn btn-sm btn-secondary">Restore</a>
+						';
+					}
+					$output .= '
+					</td>
+						<td>'.ucwords($row["category_name"]).'</td>
+						<td>'.pretty_date($row["category_added_date"]).'</td>
+						<td>';
+					if ($category_trash == 0) {
+						$output .= '<span id="'.$row["category_id"].'" onclick="temp_delete_category(category_id = '.$row["category_id"].');" class="btn btn-sm btn-light">Delete</span>
+						';
+					} else {
+						$output .= '<span id="'.$row["category_id"].'" onclick="perm_delete_category(category_id = '.$row["category_id"].');" class="btn btn-sm btn-light">Delete Permenently</span>
+						';
+					}
+					$output .= '
+					</td>
+				</tr>
+			';
+		}
+	} else {
+		$output = '
+			<tr>
+				<td colspan="4">No category found.</td>
+			</tr>
+		';
+	}
+	return $output;
+}
+
+
+function low_inventory_access() {
+	global $conn;
+	$inventoryQ = "
+        SELECT * FROM asteelu_product 
+        LEFT JOIN asteelu_category 
+        ON asteelu_category.category_id = asteelu_product.product_category 
+        WHERE asteelu_product.product_trash = 0
+    ";
+    $statement = $conn->prepare($inventoryQ);
+    $statement->execute();
+    $inventory_result = $statement->fetchAll();
+    $lowItems = array();
+    foreach ($inventory_result as $inventory_row) {
+        if ($inventory_row['product_quantity'] <= $inventory_row['product_threshold']) {
+            $item = array(
+                'product_name' => $inventory_row['product_name'],
+                'product_quantity' => $inventory_row['product_quantity'],
+                'product_threshold' => $inventory_row['product_threshold'],
+                'product_category' => $inventory_row['category_name'],
+            );
+            $lowItems[] = $item;
+        }
+    }
+    return $lowItems;
+}
+
+
+
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -442,6 +521,68 @@ function get_admin_profile() {
 }
 
 // LIST * USERS
+function get_all_users($user_trash = 0) {
+	global $conn;
+
+	$query = "
+		SELECT * FROM asteelu_user
+		WHERE user_trash = :user_trash
+	";
+	$statement = $conn->prepare($query);
+	$statement->execute([':user_trash' => $user_trash]);
+	$result = $statement->fetchAll();
+	$row_count = $statement->rowCount();
+
+	$output = '';
+	if ($row_count > 0) {
+
+		$i = 1;
+		foreach ($result as $row) {
+			$user_last_login = $row["user_last_login"];
+			if ($user_last_login == NULL) {
+				$user_last_login = '<span class="text-secondary">Never</span>';
+			} else {
+				$user_last_login = pretty_date($user_last_login);
+			}
+
+			$output .= '
+				<td>'.$i.'</td>
+				<td>'.ucwords($row["user_fullname"]).'</td>
+				<td>'.$row["user_email"].'</td>
+				<td>'.(($row["user_phone"] != '')?$row["user_phone"]:'<span class="text-secondary">Empty</span>').'</td>
+				<td>'.(($row["user_address"] != '')?ucwords($row["user_address"]):'<span class="text-secondary">Empty</span>').'</td>
+				<td>'.pretty_date($row["user_joined_date"]).'</td>
+				<td>'.$user_last_login.'</td>
+				<td>
+					<a href="users?view='.$row["user_id"].'" class="btn btn-sm btn-light"><span data-feather="eye"></span></a>&nbsp;
+			';
+			if ($user_trash == 1) {
+				$output .= '
+					<a href="users?restore='.$row["user_id"].'" class="btn btn-sm btn-secondary"><span data-feather="refresh-ccw"></span></a>&nbsp;
+					<a href="users?delete='.$row["user_id"].'" class="btn btn-sm btn-warning"><span data-feather="trash"></span></a>&nbsp;
+				';
+			} else {
+				$output .= '
+					<a href="users?terminate='.$row["user_id"].'" class="btn btn-sm btn-secondary"><span data-feather="user-x"></span></a>&nbsp;
+				';
+			}
+			$output .= '
+					</td>
+				</tr>
+			';
+			$i++;
+		}
+	} else {
+		$output = '
+			<tr>
+				<td colspan="8"> - No data found under users table.</td>
+			</tr>
+		';
+	}
+	return $output;
+}
+
+// LIST * USERS
 function subscriped_emails() {
 	global $conn;
 
@@ -476,11 +617,123 @@ function subscriped_emails() {
 	return $output;
 }
 
+// CHECK IF USER EXISTS
+function user_exist($user_id) {
+	global $conn;
+
+	$query = "
+        SELECT * FROM asteelu_user 
+        WHERE user_id = :user_id 
+        LIMIT 1
+    ";
+    $statement = $conn->prepare($query);
+    $statement->execute([':user_id' => $user_id]);
+    $count_row = $statement->rowCount();
+    return $count_row;
+}
+
+
+// CHECK IF USER EXISTS
+function category_exist($category_id) {
+	global $conn;
+
+	$query = "
+        SELECT * FROM asteelu_category 
+        WHERE category_id = :category_id 
+        LIMIT 1
+    ";
+    $statement = $conn->prepare($query);
+    $statement->execute([':category_id' => $category_id]);
+    $count_row = $statement->rowCount();
+    return $count_row;
+}
 
 
 
 
 
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Get categories
+function get_all_categories() {
+	global $conn;
+	$output = '';
+
+	$query = '
+		SELECT * FROM asteelu_category 
+		WHERE category_trash = :category_trash
+	';
+	$statement = $conn->prepare($query);
+	$statement->execute([
+		':category_trash' 	=> 0
+	]);
+	$result = $statement->fetchAll();
+
+	foreach ($result as $row) {
+		$output .= '
+			<li class="nav-item">
+                <a class="nav-link" href="'.PROOT.'category/'.$row["category_id"].'">
+                    '.$row["category_name"].'
+            	</a>
+            </li>
+		';
+	}
+	return $output;
+}
+
+
+// Get featured products
+function get_featured_products($featured = 1) {
+	global $conn;
+	$output = '';
+
+	$query = 'SELECT * FROM asteelu_product WHERE product_trash = 0';
+	if ($featured == 1) {
+		$query .= ' AND product_featured = 1';
+	}
+	$query .= ' ORDER BY product_name ASC';
+	if ($featured == 1) {
+		$query .= ' LIMIT 4';
+	}
+
+	$statement = $conn->prepare($query);
+	$statement->execute();
+	$result = $statement->fetchAll();
+
+	if ($statement->rowCount() > 0) {
+		foreach ($result as $row) {
+			$output .= '
+				<div class="col-6 col-lg-3">
+					<div class="product">
+						<figure class="product-image">
+							'.(($row["product_quantity"] == 0)?'<span class="product-promo bg-red">sold</span>':'').'
+							<a href="'.PROOT.'products/'.$row["product_id"].'">
+								<img src="'.PROOT.'media/uploaded-products/'.$row["product_image"].'" alt="Image">
+							</a>
+						</figure>
+						<div class="product-meta">
+							<h3 class="product-title"><a href="'.PROOT.'products/'.$row["product_id"].'">'.ucwords($row["product_name"]).'</a></h3>
+							<div class="product-price">
+								<span>'.money($row["product_price"]).'</span>
+								<span class="product-action">
+									<a href="'.PROOT.'products/'.$row['product_id'].'">View product</a>
+								</span>
+							</div>
+							<a href="javascript:;" class="product-like small"><del>'.money($row["product_list_price"]).'</del></a>
+						</div>
+					</div>
+				</div>
+			';
+		}
+	}
+	return $output;
+}
 
 
 
@@ -618,6 +871,47 @@ function send_vericode($email) {
 
 
 ////////////////////////////////////////////////////////////////////////////////////
+
+// Fetch products in cart
+function count_cart() {
+	global $conn;
+	global $user_data;
+	$output = 0;
+
+	$cart_id = '';
+ 	if (isset($_COOKIE[CART_COOKIE])) {
+ 		$cart_id = sanitize($_COOKIE[CART_COOKIE]);
+ 	}
+
+	if (!user_is_logged_in()) {
+		$output = 0;
+	} else {
+		$output = 0;
+		if ($cart_id == '') {
+			$output = 0;
+		} else {
+			$query = "
+				SELECT * FROM asteelu_cart 
+				WHERE cart_id = :cart_id
+			";
+			$statement = $conn->prepare($query);
+			$statement->execute([':cart_id' => $cart_id]);
+			$result = $statement->fetchAll();
+
+			foreach ($result as $row) {
+				$items = json_decode($row['items'],true);
+				$product_idArray = array();
+				foreach ($items as $item) {
+					$product_idArray[] = $item['product_id'];
+					if ($item['user_id'] == $user_data['user_id']) {
+						$output = count($product_idArray);
+					}
+				}
+			}
+		}
+	}	
+	return $output;
+}
 
 
 

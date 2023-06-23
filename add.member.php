@@ -3,7 +3,7 @@
     include ("includes/header.php");
 
     $message = '';
-    $membership_identity = 'CKTUTAS/TEIN/001/';
+    $membership_identity = 'CKT-UTAS/TEIN/001';
     $student_id = ((isset($_POST['student_id']) && !empty($_POST['student_id'])) ? sanitize($_POST['student_id']) : '');
     $fname = ((isset($_POST['fname']) && !empty($_POST['fname'])) ? sanitize($_POST['fname']) : '');
     $lname = ((isset($_POST['lname']) && !empty($_POST['lname'])) ? sanitize($_POST['lname']) : '');
@@ -413,7 +413,7 @@
                                             <option value="Yes" <?= ($executive == 'Yes')? "selected" : ""; ?>>Yes</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 mb-4 position" style="display: <?= ((isset($_GET['edit']) && $executive == 'Yes') ? 'block' : 'none'); ?>">
+                                    <div class="col-md-4 mb-4" style="display: none">
                                         <label for="position">Position</label>
                                         <select name="position" id="position" class="form-control form-control-sm">
                                             <option value="">...</option>
@@ -445,19 +445,11 @@
 <?php include ("includes/footer.php"); ?>
 
 <script>
-    $(document).ready(function() {
-
-        // if member is an executive or not
-        $("#executive").change(function() {
-            if ($("#executive").val() == 'Yes') {
-                $('.position').css('display', 'block');
-            } else {
-                // $('#position[option]').attr('selected', false);
-                $('#position').val('');
-                $('.position').css('display', 'none');
-                return  false;
-            }
-        })
-
-    })
+    var card = document.getElementById("executive");
+    if (card.options[card.selectedIndex].value == 'Yes') {
+        $('#position').css('display', 'block');
+        alert("Please select a card type");
+    } else {
+        console.log('fuck')
+    }
 </script>

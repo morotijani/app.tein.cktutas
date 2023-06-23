@@ -7,10 +7,11 @@
 	$conn = new PDO("mysql:host=$servername;dbname=tein", $username, $password);
 	session_start();
 
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/app.tein.cktutas/config.php');
- 	require_once (BASEURL.'helpers/helpers.php');
- 	require_once (BASEURL.'helpers/functions.php');
- 	require_once (BASEURL.'helpers/Category.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/app.tein.cktutas/config.php');
+ 	require_once(BASEURL.'helpers/helpers.php');
+ 	require_once(BASEURL.'helpers/functions.php');
+ 	require_once(BASEURL.'helpers/Category.php');
+ 	require_once(BASEURL.'helpers/News.php');
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

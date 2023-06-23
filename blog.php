@@ -12,7 +12,7 @@
     $category = (isset($_POST['category']) ? sanitize($_POST['category']) : '');
 
     // category edit
-    if ((isset($_GET['type']) && $_GET['type'] == 'category') && (isset($_GET['status']) && $_GET['status'] == 'edit')) {
+    if ((isset($_GET['status']) && $_GET['status'] == 'edit_category')) {
         $id = sanitize((int)$_GET['id']);
 
         $sql = "
@@ -23,8 +23,7 @@
         $statement = $conn->prepare($sql);
         $statement->execute([$id]);
         $row = $statement->fetchAll();
-        
-        if ($row) {
+        if ($statement->rowCount() > 0) {
             $category =  (isset($_POST['category']) ? sanitize($_POST['category']) : $row[0]['category']);
         } else {
             echo js_alert('Something went wrong, please try again');
@@ -96,9 +95,8 @@
     $news_created_by = (int)$admin_id;
 
     // news edit
-    if ((isset($_GET['type']) && $_GET['type'] == 'add') && (isset($_GET['status']) && $_GET['status'] == 'edit')) {
+    if (isset($_GET['status']) && $_GET['status'] == 'edit_news') { 
         $id = sanitize((int)$_GET['id']);
-
         $sql = "
             SELECT * FROM tein_news 
             WHERE id = ? 
@@ -108,14 +106,14 @@
         $statement->execute([$id]);
         $row = $statement->fetchAll();
         
-        if ($row) {
+        if ($statement->rowCount() > 0) {
             $news_title = (isset($_POST['news_title']) ? sanitize($_POST['news_title']) : $row[0]['news_title']);
             $news_category = (isset($_POST['news_category']) ? sanitize($_POST['news_category']) : $row[0]['news_category']);
             $news_content = (isset($_POST['news_content']) ? $_POST['news_content'] : $row[0]['news_content']);
-            $news_media = (($row[0]['news_media'] != '') ? $row['news_media'] : '');
+            $news_media = (($row[0]['news_media'] != '') ? $row[0]['news_media'] : '');
         } else {
             echo js_alert('Something went wrong, please try again');
-           redirect(PROOT . 'blog/add');
+          redirect(PROOT . 'blog/add');
         }
     }
 
@@ -166,9 +164,6 @@
 
     <?= $flash; ?>
     <style>
-        .tox .tox-dialog {
-/*            background-color: rgb(51, 51, 51);*/
-        }
         .tox .tox-dialog input {
             color: #000 !important;
         }
@@ -211,119 +206,119 @@
                         <div class="text-white w-100 h-100" style="z-index: 5; padding: 4px 0px; margin-bottom: 20px; transition: all 0.2s ease-in-out; background: #3B3B3B; border-radius: 4px; box-shadow: 0px 1.6px 3.6px rgb(0 0 0 / 25%), 0px 0px 2.9px rgb(0 0 0 / 22%);">
 
                             <?php if (isset($_GET['type'])): ?>
-                            <?php if ($_GET['type'] == 'all'): ?>
-                                <div class="container-fluid mt-4">
-                                    <table class="table table text-white table-bordered my-4">
-                                        <thead>
-                                            <tr style="color: #A7A7A7; font-weight: 700;">
-                                                <th></th>
-                                                <th>Heading</th>
-                                                <th>Category</th>
-                                                <th>Views</th>
-                                                <th>Date</th>
-                                                <th>Added by</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>                                            
-                                            <?php 
-                                                echo $News->allNews($conn);
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php elseif ($_GET['type'] == 'id'): ?>
-                                single view
-                            <?php elseif ($_GET['type'] == 'category' || (isset($_GET['status']) && $_GET['status'] == 'edit')): ?>
-                                <div class="container-fluid mt-4">
-                                    <div>
-                                        <code><?= $message; ?></code>
-                                        <form method="POST" action="<?= ((isset($_GET['status']) && $_GET['status'] == 'edit') ? '?edit=' . (int)$_GET['id'] : ''); ?>">
+                                <?php if ($_GET['type'] == 'all'): ?>
+                                    <div class="container-fluid mt-4">
+                                        <table class="table table text-white table-bordered my-4">
+                                            <thead>
+                                                <tr style="color: #A7A7A7; font-weight: 700;">
+                                                    <th></th>
+                                                    <th>Heading</th>
+                                                    <th>Category</th>
+                                                    <th>Views</th>
+                                                    <th>Date</th>
+                                                    <th>Added by</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                            
+                                                <?php 
+                                                    echo $News->allNews($conn);
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                <?php elseif ($_GET['type'] == 'id'): ?>
+                                    single view
+                                <?php elseif ($_GET['type'] == 'category' || (isset($_GET['status']) && $_GET['status'] == 'edit_category')): ?>
+                                    <div class="container-fluid mt-4">
+                                        <div>
+                                            <code><?= $message; ?></code>
+                                            <form method="POST" action="<?= ((isset($_GET['status']) && $_GET['status'] == 'edit') ? '?edit=' . (int)$_GET['id'] : ''); ?>">
+                                                <div class="mb-3">
+                                                    <div>
+                                                        <label for="category" class="form-label">Category</label>
+                                                        <input type="text" class="form-control form-control-sm" id="category" name="category" placeholder="Category name" value="<?= $category; ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2 mb-2">
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary" name="submit" id="submit"><?= (isset($_GET['status']) && $_GET['status'] == 'edit') ? 'Update': 'Add'; ?> Category</button>
+                                                    <?php if ((isset($_GET['status']) && $_GET['status'] == 'edit_category')): ?>
+                                                        <a href="<?= PROOT; ?>blog/category">Cancel</a>
+                                                    <?php endif ?>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <table class="table table-sm text-white table-bordered my-4" style="width: auto; margin: 0 auto;">
+                                            <thead>
+                                                <tr style="color: #A7A7A7; font-weight: 700;">
+                                                    <th></th>
+                                                    <th>Category</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                            
+                                                <?php 
+                                                    echo $Category->allCategory($conn);
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                <?php elseif ($_GET['type'] == 'add' || (isset($_GET['status']) && $_GET['status'] == 'edit_news')): ?>
+                                    <!-- ADD NEWS -->
+                                    <div class="container-fluid mt-4">
+                                        <?= $message; ?>
+                                        <form method="POST" enctype="multipart/form-data" action="<?= ((isset($_GET['status']) && $_GET['status'] == 'edit') ? '?edit=1&id=' . (int)$_GET['id'] : ''); ?>">
+                                            <div class="mb-3">
+                                                <label for="news_title">Heading</label>
+                                                <input type="text" class="form-control form-control-sm" name="news_title" id="news_title" value="<?= $news_title; ?>" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="news_category">Category</label>
+                                                <select type="text" class="form-control form-control-sm" name="news_category" id="news_category" required>
+                                                   <option value="" <?= (($news_category == '') ? 'selected' : ''); ?>>...</option>
+                                                    <?php foreach ($Category->listCategory($conn) as $category_row): ?>
+                                                        <option value="<?= $category_row['id']; ?>" <?= (($news_category == $category_row['id']) ? 'selected' : ''); ?>><?= ucwords($category_row['category']); ?></option>
+                                                    <?php endforeach ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="news_content" class="form-label">Content</label>
+                                                <textarea name="news_content" id="news_content" rows="9" class="form-control form-control-sm" required><?= $news_content; ?></textarea>
+                                                <div class="form-text text-white">Type in news details.</div>
+                                            </div>
+
+                                            <?php if ($news_media != ''): ?>
+                                            <div class="mb-3">
+                                                <label>Product Image</label><br>
+                                                <img src="<?= PROOT . $news_media; ?>" class="img-fluid img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;">
+                                                <a href="<?= PROOT; ?>add.member?dpp=1&mid=<?= $edit_id; ?>&pp=<?= $news_media; ?>" class="badge bg-danger">Change Image</a>
+                                            </div>
+                                            <?php else: ?>
                                             <div class="mb-3">
                                                 <div>
-                                                    <label for="category" class="form-label">Category</label>
-                                                    <input type="text" class="form-control form-control-sm" id="category" name="category" placeholder="Category name" value="<?= $category; ?>" required>
+                                                    <label for="news_media" class="form-label">Featured news image</label>
+                                                    <input type="file" class="form-control form-control-sm" id="news_media" name="news_media" required>
+                                                    <span id="upload_file"></span>
                                                 </div>
                                             </div>
-                                            <div class="mt-2 mb-2">
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary" name="submit" id="submit"><?= (isset($_GET['status']) && $_GET['status'] == 'edit') ? 'Update': 'Add'; ?> Category</button>
-                                                <?php if ((isset($_GET['type']) && $_GET['type'] == 'category') && (isset($_GET['status']) && $_GET['status'] == 'edit')): ?>
-                                                    <a href="<?= PROOT; ?>blog/category">Cancel</a>
+                                            <?php endif; ?>
+                                            <input type="hidden" name="uploaded_news_media" id="uploaded_news_media" value="<?= $news_media; ?>">
+
+                                            <div class="mt-2 mb-3">
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary" name="submitCategory" id="submitCategory"><?= (isset($_GET['edit']))? 'Update': 'Create'; ?> News</button>
+                                                <?php if (isset($_GET['status']) && $_GET['status'] == 'edit_news'): ?>
+                                                    <br><br>
+                                                    <a href="<?= PROOT; ?>blog/all" class="button text-secondary">Cancel</a>
                                                 <?php endif ?>
                                             </div>
                                         </form>
                                     </div>
 
-                                    <table class="table table-sm text-white table-bordered my-4" style="width: auto; margin: 0 auto;">
-                                        <thead>
-                                            <tr style="color: #A7A7A7; font-weight: 700;">
-                                                <th></th>
-                                                <th>Category</th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>                                            
-                                            <?php 
-                                                echo $Category->allCategory($conn);
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php elseif ($_GET['type'] == 'add'): ?>
-                                <!-- ADD NEWS -->
-                                <div class="container-fluid mt-4">
-                                    <?= $message; ?>
-                                    <form method="POST" enctype="multipart/form-data" action="<?= ((isset($_GET['status']) && $_GET['status'] == 'edit') ? '?edit=1&id=' . (int)$_GET['id'] : ''); ?>">
-                                        <div class="mb-3">
-                                            <label for="news_title">Heading</label>
-                                            <input type="text" class="form-control form-control-sm" name="news_title" id="news_title" value="<?= $news_title; ?>" required>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="news_category">Category</label>
-                                            <select type="text" class="form-control form-control-sm" name="news_category" id="news_category" required>
-                                               <option value="" <?= (($news_category == '') ? 'selected' : ''); ?>>...</option>
-                                                <?php foreach ($Category->listCategory($conn) as $category_row): ?>
-                                                    <option value="<?= $category_row['id']; ?>" <?= (($news_category == $category_row['id']) ? 'selected' : ''); ?>><?= ucwords($category_row['category']); ?></option>
-                                                <?php endforeach ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="news_content" class="form-label">Content</label>
-                                            <textarea name="news_content" id="news_content" rows="9" class="form-control form-control-sm" required><?= $news_content; ?></textarea>
-                                            <div class="form-text text-white">Type in news details.</div>
-                                        </div>
-
-                                        <?php if ($news_media != ''): ?>
-                                        <div class="mb-3">
-                                            <label>Product Image</label><br>
-                                            <img src="<?= $news_media; ?>" class="img-fluid img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;">
-                                            <a href="<?= PROOT; ?>add.member?dpp=1&mid=<?= $edit_id; ?>&pp=<?= $news_media; ?>" class="badge bg-danger">Change Image</a>
-                                        </div>
-                                        <?php else: ?>
-                                        <div class="mb-3">
-                                            <div>
-                                                <label for="news_media" class="form-label">Featured news image</label>
-                                                <input type="file" class="form-control form-control-sm" id="news_media" name="news_media" required>
-                                                <span id="upload_file"></span>
-                                            </div>
-                                        </div>
-                                        <?php endif; ?>
-                                        <input type="hidden" name="uploaded_news_media" id="uploaded_news_media" value="<?= $news_media; ?>">
-
-                                        <div class="mt-2 mb-3">
-                                            <button type="submit" class="btn btn-sm btn-outline-secondary" name="submitCategory" id="submitCategory"><?= (isset($_GET['edit']))? 'Update': 'Create'; ?> News</button>
-                                            <?php if (isset($_GET['edit'])): ?>
-                                                <br><br>
-                                                <a href="<?= PROOT; ?>members" class="button text-secondary">Cancel</a>
-                                            <?php endif ?>
-                                        </div>
-                                    </form>
-                                </div>
-
-                            <?php endif; ?>
+                                <?php endif; ?>
                             <?php else: ?>
                                 <ul class="list-group">
                                     <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">

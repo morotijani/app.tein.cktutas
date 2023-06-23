@@ -29,7 +29,7 @@
 	                $this->output .= "
 	                	<tr>
 		                    <td>
-		                        <a class='badge bg-secondary text-decoration-none' href='" . PROOT . "blog/category/edit/" . $category['id'] . "'>Edit</a>
+		                        <a class='badge bg-secondary text-decoration-none' href='" . PROOT . "blog/category/edit_category/" . $category['id'] . "'>Edit</a>
 		                    </td>
 		                    <td>" . ucwords($category['category']) . "</td>
 		                    <td>" . pretty_date($category['createdAt']) . "</td>

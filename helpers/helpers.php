@@ -1,4 +1,10 @@
 <?php 
+function dnd($data) {
+	echo "<pre>";
+	print_r($data);
+	echo "</pre>";
+    die;
+}
 
 // Make Date Readable
 function pretty_date($date){
@@ -61,6 +67,10 @@ function php_url_slug($string) {
  	return $slug;
 }
 
+
+function js_alert($msg) {
+	return '<script>alert("' . $msg . '");</script>';
+}
 
 
 

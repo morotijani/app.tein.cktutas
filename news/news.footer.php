@@ -33,6 +33,22 @@
         </div>
     </div>
 
+    <!-- search modal -->
+    <div class='modal fade' id='searchModal' tabindex='-1' aria-labelledby='searchModalLabel' aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered'>
+            <div class='modal-content'>
+                <div class='modal-body'>
+                    <form method="GET" action="<?= PROOT; ?>news/search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="q" id="q" placeholder="Enter search">
+                            <button class="btn btn-outline-secondary" type="button">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="<?= PROOT; ?>news/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>

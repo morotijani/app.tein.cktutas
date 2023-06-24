@@ -12,6 +12,7 @@
  	require_once(BASEURL.'helpers/functions.php');
  	require_once(BASEURL.'helpers/Category.php');
  	require_once(BASEURL.'helpers/News.php');
+ 	require_once(BASEURL.'helpers/Search.php');
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

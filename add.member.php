@@ -299,9 +299,9 @@
                                             <label for="sex">Sex</label>
                                             <select type="text" class="form-control form-control-sm" name="sex" id="sex">
                                                 <option value="">...</option>
-                                                <option <?= ($sex == 'Male')? "selected" : ""; ?>>Male</option>
-                                                <option <?= ($sex == 'Female')? "selected" : ""; ?>>Female</option>
-                                                <option <?= ($sex == 'Other')? "selected" : ""; ?>>Other</option>
+                                                <option <?= ($sex == 'Male') ? "selected" : ""; ?>>Male</option>
+                                                <option <?= ($sex == 'Female') ? "selected" : ""; ?>>Female</option>
+                                                <option <?= ($sex == 'Other') ? "selected" : ""; ?>>Other</option>
                                             </select>
                                         </div>
                                     </div>

@@ -11,6 +11,9 @@ RewriteRule ^news/view/([a-zA-Z-0-9-]+)/ news/view.php?url=$1 [NC,L]
 RewriteRule ^news/category/([a-zA-Z0-9-/]+)$ news/category.php?url=$1 [NC,L]
 RewriteRule ^news/category/([a-zA-Z-0-9-]+)/ news/category.php?url=$1 [NC,L]
 
+RewriteRule ^news/search/([a-zA-Z0-9-/]+)$ news/search.php?q=$1 [NC,L]
+RewriteRule ^news/search/([a-zA-Z-0-9-]+)/ news/search.php?q=$1 [NC,L]
+
 RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteCond %{REQUEST_FILENAME}\.php -f

@@ -193,7 +193,7 @@
             <nav class="nav nav-underline justify-content-between">
                 <a class="nav-item nav-link link-body-emphasis active" href="<?= PROOT; ?>news">Main</a>
                 <?php foreach ($Category->listCategory($conn) as $category): ?>
-                    <a class="nav-item nav-link link-body-emphasis" href="<?= PROOT . 'category/'. $category['category_url']; ?>"><?= ucwords($category['category']); ?></a>
+                    <a class="nav-item nav-link link-body-emphasis" href="<?= PROOT . 'news/category/'. $category['category_url']; ?>"><?= ucwords($category['category']); ?></a>
                 <?php endforeach; ?>
             </nav>
         </div>

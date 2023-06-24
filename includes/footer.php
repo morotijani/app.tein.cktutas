@@ -65,6 +65,9 @@
                         $('#removeTempuploadedFile').remove();
                         $('#passport').css('visibility', 'visible');
                         $('#passport').val('');
+
+                        $('#news_media').css('visibility', 'visible');
+                        $('#news_media').val('');
                     }
                 });
             });

@@ -2,8 +2,9 @@
     require_once ("db_connection/conn.php");
     include ("includes/header.php");
 
+    $Allfunctions = new AllFunctions();
+
     $message = '';
-    $membership_identity = 'CKT-UTAS/TEIN/001';
     $student_id = ((isset($_POST['student_id']) && !empty($_POST['student_id'])) ? sanitize($_POST['student_id']) : '');
     $fname = ((isset($_POST['fname']) && !empty($_POST['fname'])) ? sanitize($_POST['fname']) : '');
     $lname = ((isset($_POST['lname']) && !empty($_POST['lname'])) ? sanitize($_POST['lname']) : '');
@@ -47,7 +48,6 @@
         $result_edit = $statement->fetchAll();
 
         foreach ($result_edit as $row) {
-            $membership_identity = $row['membership_identity'];
             $student_id = ((isset($_POST['student_id']) && $_POST['student_id'] != '') ? sanitize($_POST['student_id']) : $row['membership_student_id']);
             $fname = ((isset($_POST['fname']) && $_POST['fname'] != '') ? sanitize($_POST['fname']) : $row['membership_fname']);
             $lname = ((isset($_POST['lname']) && $_POST['lname'] != '') ? sanitize($_POST['lname']) : $row['membership_lname']);
@@ -115,7 +115,7 @@
 
             if (empty($message)) {
                 $data = array(
-                    $membership_identity, $student_id, $fname, $lname, $email, $sex, $school, $department, $programme, $level, $yoa, $yoc, $hostel, $region, $constituency, $branch, $location, $whatsapp, $telephone, $card_type, $executive, $position, $paid, $registered_date
+                    $student_id, $fname, $lname, $email, $sex, $school, $department, $programme, $level, $yoa, $yoc, $hostel, $region, $constituency, $branch, $location, $whatsapp, $telephone, $card_type, $executive, $position, $paid, $registered_date
                 );
                 if (isset($_GET['edit']) && !empty($_GET['id'])) {
                     $edit_id = sanitize((int)$_GET['id']);
@@ -123,7 +123,7 @@
                     $mergeData = array_merge($data, $dataOne);
                     $updateQ = "
                         UPDATE tein_membership 
-                        SET `membership_identity` = ?, `membership_student_id` = ?, `membership_fname` = ?, `membership_lname` = ?, `membership_email` = ?, `membership_sex` = ?, `membership_school` = ?, `membership_department` = ?, `membership_programme` = ?, `membership_level` = ?, `membership_yoa` = ?, `membership_yoc` = ?, `membership_name_of_hostel` = ?, `membership_region` = ?, `membership_constituency` = ?, `membership_branch` = ?, `membership_passport` = ?, `membership_whatsapp_contact` = ?, `membership_telephone_number` = ?, `membership_card_type` = ?, `membership_executive` = ?, `membership_position` = ?, `membership_paid` = ?, `membership_registered_date` = ? 
+                        SET `membership_student_id` = ?, `membership_fname` = ?, `membership_lname` = ?, `membership_email` = ?, `membership_sex` = ?, `membership_school` = ?, `membership_department` = ?, `membership_programme` = ?, `membership_level` = ?, `membership_yoa` = ?, `membership_yoc` = ?, `membership_name_of_hostel` = ?, `membership_region` = ?, `membership_constituency` = ?, `membership_branch` = ?, `membership_passport` = ?, `membership_whatsapp_contact` = ?, `membership_telephone_number` = ?, `membership_card_type` = ?, `membership_executive` = ?, `membership_position` = ?, `membership_paid` = ?, `membership_registered_date` = ? 
                         WHERE id = ?";
                     $statement = $conn->prepare($updateQ);
                     $resultQ = $statement->execute($mergeData);
@@ -133,11 +133,14 @@
                     }
                 } else {
                     $query = "
-                        INSERT INTO `tein_membership`(`membership_identity`, `membership_student_id`, `membership_fname`, `membership_lname`, `membership_email`, `membership_sex`, `membership_school`, `membership_department`, `membership_programme`, `membership_level`, `membership_yoa`, `membership_yoc`, `membership_name_of_hostel`, `membership_region`, `membership_constituency`, `membership_branch`, `membership_passport`, `membership_whatsapp_contact`, `membership_telephone_number`, `membership_card_type`, `membership_executive`, `membership_position`, `membership_paid`, `membership_registered_date`) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        INSERT INTO `tein_membership`(`membership_student_id`, `membership_fname`, `membership_lname`, `membership_email`, `membership_sex`, `membership_school`, `membership_department`, `membership_programme`, `membership_level`, `membership_yoa`, `membership_yoc`, `membership_name_of_hostel`, `membership_region`, `membership_constituency`, `membership_branch`, `membership_passport`, `membership_whatsapp_contact`, `membership_telephone_number`, `membership_card_type`, `membership_executive`, `membership_position`, `membership_paid`, `membership_registered_date`) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ";
                     $statement = $conn->prepare($query);
                     $result = $statement->execute($data);
+                    $inserted_id = $conn->lastInsertId();
+                    $identity = $Allfunctions->generate_identity_number($conn);
+                    $conn->query("UPDATE tein_membership SET membership_identity = $identity WHERE id = $inserted_id")->execute();
                     if (isset($result)) {
                         $_SESSION['flash_success'] = 'New Member successfully <span class="bg-info">Added</span>';
                         redirect(PROOT . 'members');
@@ -413,7 +416,7 @@
                                             <option value="Yes" <?= ($executive == 'Yes')? "selected" : ""; ?>>Yes</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 mb-4" style="display: none">
+                                    <div class="col-md-4 mb-4 executive <?= ($executive == 'Yes') ? '' : 'd-none'; ?>">
                                         <label for="position">Position</label>
                                         <select name="position" id="position" class="form-control form-control-sm">
                                             <option value="">...</option>
@@ -444,12 +447,20 @@
     </div>
 <?php include ("includes/footer.php"); ?>
 
-<script>
-    var card = document.getElementById("executive");
-    if (card.options[card.selectedIndex].value == 'Yes') {
-        $('#position').css('display', 'block');
-        alert("Please select a card type");
-    } else {
-        console.log('fuck')
-    }
-</script>
+    <script>
+        $("#executive").change(function(e) {
+            e.preventDefault();
+
+            var executive = $("#executive option:selected").val();
+            if (executive != '') {
+                if (executive == 'Yes') {
+                    $(".executive").removeClass('d-none');
+                } else {
+                    $('#executive').prop('selected', false);
+                    $(".executive").addClass('d-none');
+                }
+            } else {
+                return false;
+            }
+        })
+    </script>

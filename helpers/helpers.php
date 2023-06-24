@@ -12,6 +12,11 @@ function pretty_date($date){
 }
 
 // Make Date Readable
+function pretty_month_and_day($date){
+	return date("M d", strtotime($date));
+}
+
+// Make Date Readable
 function pretty_date_notime($date){
 	return date("M d, Y", strtotime($date));
 }

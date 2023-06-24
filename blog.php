@@ -173,8 +173,35 @@
             $_SESSION['flash_success'] = ucwords($news_title) . ' successfully ' . ((isset($_GET['status']) && $_GET['status'] == 'edit_news') ? 'updated' : 'added') . '!';        
             redirect(PROOT . 'blog/all');
         } else {
-            echo js_alert('Something went wrong, please try again');
+            $_SESSION['flash_error'] = 'Something went wrong, please try again';
             redirect(PROOT . 'blog/all');
+        }
+    }
+
+
+    // DELETE A picture on edit news post
+    if ((isset($_GET['delete_np']) && !empty($_GET['delete_np'])) && (isset($_GET['image']) && !empty($_GET['image']))) {
+        $result = $News->deleteNewsMedia($conn, (int)$_GET['delete_np'], sanitize($_GET['image']));
+        if ($result) {
+            $_SESSION['flash_success'] = 'Media deleted, upload new one!';            
+            redirect(PROOT . 'blog/add/edit_news/' . (int)$_GET['delete_np']);
+        } else {
+            $_SESSION['flash_error'] = 'Something went wrong, please try again';
+            redirect(PROOT . 'blog/add/edit_news/' . (int)$_GET['delete_np']);
+        }
+    }
+
+
+    // delete subscriber
+    if (isset($_GET['status']) && $_GET['status'] == 'delete_subscriber') {
+        $delete = $News->deleteSubscriber($conn, (int)$_GET['id']);
+        if ($delete) {
+            // code...
+            $_SESSION['flash_success'] = 'Subscriber deleted!';            
+            redirect(PROOT . 'blog/subscribers/' . (int)$_GET['delete_np']);
+        } else {
+            $_SESSION['flash_error'] = 'Something went wrong, please try again';
+            redirect(PROOT . 'blog/subscribers/' . (int)$_GET['delete_np']);
         }
     }
 ?> 
@@ -192,7 +219,7 @@
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
                         <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . News Dashboard</h2>
-                        <a href="<?= PROOT; ?>blog/<?= ((!isset($_GET['type'])) ? 'add' : 'all'); ?>" class="btn btn-sm btn-outline-secondary" style="background: #333333;"><?= ((!isset($_GET['type'])) ? ' + Add' : ' * All'); ?> News</a>
+                        <a href="<?= PROOT; ?>blog/<?= ((isset($_GET['type']) && $_GET['type'] != 'all') ? 'all' : 'add'); ?>" class="btn btn-sm btn-outline-secondary" style="background: #333333;"><?= ((isset($_GET['type']) && $_GET['type'] != 'all') ? ' * All' : ' + Add'); ?> News</a>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
@@ -235,6 +262,7 @@
                                                     <th>Date</th>
                                                     <th>Added by</th>
                                                     <th></th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>                                            
@@ -244,8 +272,24 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                <?php elseif ($_GET['type'] == 'id'): ?>
-                                    single view
+                                <?php elseif ($_GET['type'] == 'subscribers'): ?>
+                                    <div class="container-fluid mt-4">
+                                        <table class="table table-sm text-white table-bordered my-4">
+                                            <thead>
+                                                <tr style="color: #A7A7A7; font-weight: 700;">
+                                                    <th></th>
+                                                    <th>Email</th>
+                                                    <th>Date</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                            
+                                                <?php 
+                                                    echo $News->allSubscribers($conn);
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 <?php elseif ($_GET['type'] == 'category' || (isset($_GET['status']) && $_GET['status'] == 'edit_category')): ?>
                                     <div class="container-fluid mt-4">
                                         <div>
@@ -312,7 +356,7 @@
                                             <div class="mb-3">
                                                 <label>Product Image</label><br>
                                                 <img src="<?= PROOT . $news_media; ?>" class="img-fluid img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;">
-                                                <a href="<?= PROOT; ?>add.member?dpp=1&mid=<?= $edit_id; ?>&pp=<?= $news_media; ?>" class="badge bg-danger">Change Image</a>
+                                                <a href="<?= PROOT; ?>blog?delete_np=<?= $_GET['id']; ?>&image=<?= $news_media; ?>" class="badge bg-danger">Change Image</a>
                                             </div>
                                             <?php else: ?>
                                             <div class="mb-3">
@@ -355,6 +399,11 @@
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">
+                                    <a href="<?= PROOT; ?>blog/all" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                        <span class="menu-item"><i class="bi bi-eye-fill"></i> View all news</span>
+                                        <span class=""><i class="bi bi-arrow-right"></i></span>
+                                    </a>
+                                    <hr aria-hidden="true" class="menu-hr">
                                     <a href="<?= PROOT; ?>blog/category" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                         <span class="menu-item"><i class="bi bi-tag"></i> Categories</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
@@ -365,8 +414,8 @@
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">
-                                    <a href="<?= PROOT; ?>blog/all" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                        <span class="menu-item"><i class="bi bi-eye-fill"></i> View all news</span>
+                                    <a href="<?= PROOT; ?>blog/subscribers" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                        <span class="menu-item"><i class="bi bi-person-up"></i> Subscribers</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">

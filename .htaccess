@@ -5,6 +5,10 @@ RewriteRule ^blog/([0-9a-zA-Z_-]+)/([0-9a-zA-Z_-]+)$ blog.php?type=$1&status=$2 
 RewriteRule ^blog/([0-9a-zA-Z_-]+)/([0-9a-zA-Z_-]+)/([0-9]+)$ blog.php?type=$1&status=$2&id=$3 [NC,L]
 RewriteRule ^blog/([0-9a-zA-Z_-]+)/([0-9a-zA-Z_-]+)/([0-9]+)/([0-9]+)$ blog.php?type=$1&status=$2&id=$3&featured=$4 [NC,L]
 
+#RewriteRule ^news/view/([0-9a-zA-Z]+)$ news/view.php?type=$1 [NC,L]
+RewriteRule ^news/view/([a-zA-Z0-9-/]+)$ news/view.php?url=$1 [NC,L]
+RewriteRule ^news/view/([a-zA-Z-0-9-]+)/ news/view.php?url=$1 [NC,L]
+
 RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteCond %{REQUEST_FILENAME}\.php -f

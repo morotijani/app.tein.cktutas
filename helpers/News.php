@@ -175,14 +175,15 @@
 		}
 
 		// fetch all news except featured
-		public function fetchNews($conn) {
+		public function fetchNews($conn, $offset, $per_page) {
 			$query = "
 				SELECT *, tein_news.id AS news_id, tein_news.createdAt AS ca FROM tein_news 
 				INNER JOIN tein_category 
 				ON tein_category.id = tein_news.news_category
 				WHERE tein_news.news_featured = ?
 				AND tein_news.news_status = ? 
-				ORDER BY tein_news.createdAt DESC
+				ORDER BY tein_news.createdAt DESC 
+				LIMIT {$offset}, {$per_page}
 			";
 			$statement = $conn->prepare($query);
 			$statement->execute([0, 0]);

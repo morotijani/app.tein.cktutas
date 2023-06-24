@@ -138,9 +138,12 @@
                     ";
                     $statement = $conn->prepare($query);
                     $result = $statement->execute($data);
+
                     $inserted_id = $conn->lastInsertId();
-                    $identity = $Allfunctions->generate_identity_number($conn);
-                    $conn->query("UPDATE tein_membership SET membership_identity = $identity WHERE id = $inserted_id")->execute();
+                    $identity = $Allfunctions->generate_identity_number($inserted_id);
+
+                    $conn->query("UPDATE tein_membership SET membership_identity = '".$identity."' WHERE id = $inserted_id")->execute();
+
                     if (isset($result)) {
                         $_SESSION['flash_success'] = 'New Member successfully <span class="bg-info">Added</span>';
                         redirect(PROOT . 'members');

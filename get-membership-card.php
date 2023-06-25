@@ -210,45 +210,50 @@
     <?php include ("includes/footer.php"); ?>
     <script src="https://js.paystack.co/v1/inline.js"></script> 
     <script>
-        $('#email').on('keyup', function(e) {
-            e.preventDefault();
-            var  email = $('#email').val()
 
-            $.ajax ({
-                url: '<?= PROOT; ?>controller/check.exist.php',
-                method : 'POST',
-                data: {email : email},
-                success : function(data) {
-                    if (data == '') {
-                        $('.email_msg').html();
-                        return true
-                    } else {
-                        $('.email_msg').html(data);
-                        return false;
+        function checkemail() {
+            $('#email').on('keyup', function(e) {
+                e.preventDefault();
+                var  email = $('#email').val()
+
+                $.ajax ({
+                    url: '<?= PROOT; ?>controller/check.exist.php',
+                    method : 'POST',
+                    data: {email : email},
+                    success : function(data) {
+                        if (data == '') {
+                            $('.email_msg').html();
+                            return true
+                        } else {
+                            $('.email_msg').html(data);
+                            return false;
+                        }
                     }
-                }
+                })
             })
-        })
+        }
         
-        $('#student_id').on('keyup', function(e) {
-            e.preventDefault();
-            var  studentId = $('#student_id').val()
+        function checkstudentid() {
+            $('#student_id').on('keyup', function(e) {
+                e.preventDefault();
+                var  studentId = $('#student_id').val()
 
-            $.ajax ({
-                url: '<?= PROOT; ?>controller/check.exist.php',
-                method : 'POST',
-                data: {studentId : studentId},
-                success : function(data) {
-                    if (data == '') {
-                        $('.student_msg').html();
-                        return true
-                    } else {
-                        $('.student_msg').html(data);
-                        return false;
+                $.ajax ({
+                    url: '<?= PROOT; ?>controller/check.exist.php',
+                    method : 'POST',
+                    data: {studentId : studentId},
+                    success : function(data) {
+                        if (data == '') {
+                            $('.student_msg').html();
+                            return true
+                        } else {
+                            $('.student_msg').html(data);
+                            return false;
+                        }
                     }
-                }
+                })
             })
-        })
+        }
 
         const paymentForm = document.getElementById('membershipForm');
         paymentForm.addEventListener("submit", payWithPaystack, false);
@@ -441,31 +446,21 @@
                                                                     },
                                                                     callback: function(response) {
                                                                         $('#ref').val(response.reference);
-                                                                        // var $this = $('#membershipForm');
 
-                                                                        // var form_data = new FormData($this);
-                                                                        // form_data.append("passport", property);
-                                                                        // 
                                                                         var data = new FormData();
 
-                                                                        //Form data
+                                                                        // Form data
                                                                         var form_data = $('#membershipForm').serializeArray();
                                                                         $.each(form_data, function (key, input) {
                                                                             data.append(input.name, input.value);
                                                                         });
 
-                                                                        //File data
+                                                                        // File data
                                                                         var property = document.getElementById("passport").files[0];
-                                                                        //var file_data = $('input[name="passport"]')[0].files;
                                                                         data.append("passport", property);
-                                                                        // for (var i = 0; i < file_data.length; i++) {
-                                                                        // }
 
-                                                                        //Custom data
-                                                                        data.append('key', 'value');
-
-                                                                        // form_data.append("passport", property);
-                                                                        
+                                                                        // Custom data
+                                                                        data.append('key', 'value');                                                                        
                                                                         $.ajax({
                                                                             url : 'controller/add.member.verify.payment.php',
                                                                             method : 'POST',
@@ -475,7 +470,7 @@
                                                                             processData: false,
                                                                             success : function(data) {
                                                                                 if (data == '') {
-                                                                                    // window.location = '<?= PROOT; ?>member.success';
+                                                                                    window.location = '<?= PROOT; ?>member.success';
                                                                                 } else {
                                                                                     console.log(data);
                                                                                 }

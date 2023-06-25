@@ -11,14 +11,14 @@
 		$statement = $conn->prepare($query);
 		$statement->execute([$reference]);
 		if ($statement->rowCount() > 0) {
-			
+			print_r($statement->fetchAll());
 		} else {
-			session_unset($_SESSION['member']);
-			redirect(POOT . 'get-membership-card');
+			// session_unset($_SESSION['member']);
+			// redirect(POOT . 'get-membership-card');
 		}
 	} else {
-		session_unset($_SESSION['member']);
-		redirect(POOT . 'get-membership-card');
+		// session_unset($_SESSION['member']);
+		// redirect(POOT . 'get-membership-card');
 	}
 
 ?>

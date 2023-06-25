@@ -211,49 +211,45 @@
     <script src="https://js.paystack.co/v1/inline.js"></script> 
     <script>
 
-        function checkemail() {
-            $('#email').on('keyup', function(e) {
-                e.preventDefault();
-                var  email = $('#email').val()
+        $('#email').on('keyup', function(e) {
+            e.preventDefault();
+            var  email = $('#email').val()
 
-                $.ajax ({
-                    url: '<?= PROOT; ?>controller/check.exist.php',
-                    method : 'POST',
-                    data: {email : email},
-                    success : function(data) {
-                        if (data == '') {
-                            $('.email_msg').html();
-                            return true
-                        } else {
-                            $('.email_msg').html(data);
-                            return false;
-                        }
+            $.ajax ({
+                url: '<?= PROOT; ?>controller/check.exist.php',
+                method : 'POST',
+                data: {email : email},
+                success : function(data) {
+                    if (data == '') {
+                        $('.email_msg').html();
+                        return true
+                    } else {
+                        $('.email_msg').html(data);
+                        return false;
                     }
-                })
+                }
             })
-        }
+        })
         
-        function checkstudentid() {
-            $('#student_id').on('keyup', function(e) {
-                e.preventDefault();
-                var  studentId = $('#student_id').val()
+        $('#student_id').on('keyup', function(e) {
+            e.preventDefault();
+            var  studentId = $('#student_id').val()
 
-                $.ajax ({
-                    url: '<?= PROOT; ?>controller/check.exist.php',
-                    method : 'POST',
-                    data: {studentId : studentId},
-                    success : function(data) {
-                        if (data == '') {
-                            $('.student_msg').html();
-                            return true
-                        } else {
-                            $('.student_msg').html(data);
-                            return false;
-                        }
+            $.ajax ({
+                url: '<?= PROOT; ?>controller/check.exist.php',
+                method : 'POST',
+                data: {studentId : studentId},
+                success : function(data) {
+                    if (data == '') {
+                        $('.student_msg').html();
+                        return true
+                    } else {
+                        $('.student_msg').html(data);
+                        return false;
                     }
-                })
+                }
             })
-        }
+        })
 
         const paymentForm = document.getElementById('membershipForm');
         paymentForm.addEventListener("submit", payWithPaystack, false);
@@ -280,6 +276,21 @@
                 $('.student_msg').html('Student id is required!');
                 return false;
             } else {
+                $.ajax ({
+                    url: '<?= PROOT; ?>controller/check.exist.php',
+                    method : 'POST',
+                    data: {studentId : student_id},
+                    success : function(data) {
+                        if (data == '') {
+                            $('.student_msg').html();
+                            return true
+                        } else {
+                            $('.student_msg').html(data);
+                            return false;
+                        }
+                    }
+                })
+
                 $('.student_msg').html('');
                 if (fname == '') {
                     $('#fname').focus();
@@ -301,6 +312,21 @@
                             $('.email_msg').html('Email required!');
                             return false;
                         } else {
+                            $.ajax ({
+                                url: '<?= PROOT; ?>controller/check.exist.php',
+                                method : 'POST',
+                                data: {email : email},
+                                success : function(data) {
+                                    if (data == '') {
+                                        $('.email_msg').html();
+                                        return true
+                                    } else {
+                                        $('.email_msg').html(data);
+                                        return false;
+                                    }
+                                }
+                            })
+                            
                             $('.student_msg').html('');
                             $('.fname_msg').html('');
                             $('.lname_msg').html('');

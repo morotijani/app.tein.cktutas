@@ -45,7 +45,7 @@
                         },
                         success: function(data) {
                             $("#upload_file").html(data);
-                            // $('#passport').css('visibility', 'hidden');
+                            $('#passport').css('visibility', 'hidden');
                         }
                     });
                 }

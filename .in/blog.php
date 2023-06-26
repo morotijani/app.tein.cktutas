@@ -1,5 +1,5 @@
 <?php 
-    require_once ("db_connection/conn.php");
+    require_once ("../db_connection/conn.php");
     if (!admin_is_logged_in()) {
         admn_login_redirect();
     }
@@ -27,12 +27,12 @@
             $category =  (isset($_POST['category']) ? sanitize($_POST['category']) : $row[0]['category']);
         } else {
             echo js_alert('Something went wrong, please try again');
-            redirect(PROOT . 'blog/category');
+            redirect(PROOT . '.in/category');
         }
     }
 
     // ADD CATEGORY
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['submit_category'])) {
         if (!empty($category)) {
             $check = $conn->query("SELECT * FROM tein_category WHERE category = '".$category."'")->rowCount();
             if (isset($_GET['status']) && $_GET['status'] == 'edit') {
@@ -57,10 +57,10 @@
                 $result = $statement->execute([$category, $category_url]);
                 if (isset($result)) {
                     $_SESSION['flash_success'] = ucwords($category) . ' successfully ' . ((isset($_GET['status']) && $_GET['status'] == 'edit_category') ? 'updated' : 'added') . '!';        
-                    redirect(PROOT . 'blog/category');
+                    redirect(PROOT . '.in/blog/category');
                 } else {
                     echo js_alert('Something went wrong, please try again');
-                    redirect(PROOT . 'blog/category');
+                    redirect(PROOT . '.in/blog/category');
                 }
             }
         } else {
@@ -74,10 +74,10 @@
         $result = $Category->deleteCategory($conn, $delete);
         if ($result) {
             $_SESSION['flash_success'] = 'Category deleted!';            
-            redirect(PROOT . 'blog/category');
+            redirect(PROOT . '.in/blog/category');
         } else {
             echo js_alert('Something went wrong, please try again');
-            redirect(PROOT . 'blog/category');
+            redirect(PROOT . '.in/blog/category');
         }
     }  
 
@@ -93,10 +93,10 @@
         $feature = $News->featuredNews($conn, (int)$_GET['featured'], (int)$_GET['id']);
         if ($feature) {
             $_SESSION['flash_success'] = 'News ' . (($_GET['featured'] == 0) ? 'un-featured' : 'featured') . ' successfully!';
-            redirect(PROOT . 'blog/all');
+            redirect(PROOT . '.in/blog/all');
         } else {
             $_SESSION['flash_error'] = 'Something went wrong, please try again!';
-            redirect(PROOT . 'blog/all');
+            redirect(PROOT . '.in/blog/all');
         }
     }
     
@@ -130,7 +130,7 @@
             $news_media = (($row[0]['news_media'] != '') ? $row[0]['news_media'] : '');
         } else {
             echo js_alert('Something went wrong, please try again');
-          redirect(PROOT . 'blog/add');
+          redirect(PROOT . '.in/blog/add');
         }
     }
 
@@ -171,10 +171,10 @@
         $result = $statement->execute([$news_title, $news_url, $news_content, $news_media, $news_category, $news_created_by]);
         if (isset($result)) {
             $_SESSION['flash_success'] = ucwords($news_title) . ' successfully ' . ((isset($_GET['status']) && $_GET['status'] == 'edit_news') ? 'updated' : 'added') . '!';        
-            redirect(PROOT . 'blog/all');
+            redirect(PROOT . '.in/blog/all');
         } else {
             $_SESSION['flash_error'] = 'Something went wrong, please try again';
-            redirect(PROOT . 'blog/all');
+            redirect(PROOT . '.in/blog/all');
         }
     }
 
@@ -184,10 +184,22 @@
         $result = $News->deleteNewsMedia($conn, (int)$_GET['delete_np'], sanitize($_GET['image']));
         if ($result) {
             $_SESSION['flash_success'] = 'Media deleted, upload new one!';            
-            redirect(PROOT . 'blog/add/edit_news/' . (int)$_GET['delete_np']);
+            redirect(PROOT . '.in/blog/add/edit_news/' . (int)$_GET['delete_np']);
         } else {
             $_SESSION['flash_error'] = 'Something went wrong, please try again';
-            redirect(PROOT . 'blog/add/edit_news/' . (int)$_GET['delete_np']);
+            redirect(PROOT . '.in/blog/add/edit_news/' . (int)$_GET['delete_np']);
+        }
+    }
+
+    // Delete news
+    if (isset($_GET['type']) && $_GET['type'] == 'add' && $_GET['status'] == 'delete') {
+        $delete = $News->deleteNews($conn, sanitize((int)$_GET['id']));
+        if (isset($delete)) {
+            $_SESSION['flash_success'] = 'News deleted but temporary';
+            redirect(PROOT . '.in/blog/all');
+        } else {
+            $_SESSION['flash_error'] = 'Something went wrong, please try again';
+            redirect(PROOT . '.in/blog/all');
         }
     }
 
@@ -198,10 +210,10 @@
         if ($delete) {
             // code...
             $_SESSION['flash_success'] = 'Subscriber deleted!';            
-            redirect(PROOT . 'blog/subscribers/' . (int)$_GET['delete_np']);
+            redirect(PROOT . '.in/blog/subscribers/' . (int)$_GET['delete_np']);
         } else {
             $_SESSION['flash_error'] = 'Something went wrong, please try again';
-            redirect(PROOT . 'blog/subscribers/' . (int)$_GET['delete_np']);
+            redirect(PROOT . '.in/blog/subscribers/' . (int)$_GET['delete_np']);
         }
     }
 ?> 
@@ -219,7 +231,7 @@
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
                         <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . News Dashboard</h2>
-                        <a href="<?= PROOT; ?>blog/<?= ((isset($_GET['type']) && $_GET['type'] != 'all') ? 'all' : 'add'); ?>" class="btn btn-sm btn-outline-secondary" style="background: #333333;"><?= ((isset($_GET['type']) && $_GET['type'] != 'all') ? ' * All' : ' + Add'); ?> News</a>
+                        <a href="<?= PROOT; ?>.in/blog/<?= ((isset($_GET['type']) && $_GET['type'] != 'all') ? 'all' : 'add'); ?>" class="btn btn-sm btn-outline-secondary" style="background: #333333;"><?= ((isset($_GET['type']) && $_GET['type'] != 'all') ? ' * All' : ' + Add'); ?> News</a>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
@@ -236,7 +248,7 @@
                             <div class="btn-group me-2">
                                 <button type="button" class="text-white" style="background-color: transparent; border: none;">...</button>
                             </div>
-                            <a href="<?= PROOT; ?>blog" class="btn btn-sm btn-outline-secondary">
+                            <a href="<?= PROOT; ?>.in/blog" class="btn btn-sm btn-outline-secondary">
                                 Menu
                             </a>
                         </div>
@@ -302,9 +314,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="mt-2 mb-2">
-                                                    <button type="submit" class="btn btn-sm btn-outline-secondary" name="submit" id="submit"><?= (isset($_GET['status']) && $_GET['status'] == 'edit') ? 'Update': 'Add'; ?> Category</button>
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary" name="submit_category" id="submit_category"><?= (isset($_GET['status']) && $_GET['status'] == 'edit') ? 'Update': 'Add'; ?> Category</button>
                                                     <?php if ((isset($_GET['status']) && $_GET['status'] == 'edit_category')): ?>
-                                                        <a href="<?= PROOT; ?>blog/category">Cancel</a>
+                                                        <a href="<?= PROOT; ?>.in/blog/category">Cancel</a>
                                                     <?php endif ?>
                                                 </div>
                                             </form>
@@ -356,7 +368,7 @@
                                             <div class="mb-3">
                                                 <label>Product Image</label><br>
                                                 <img src="<?= PROOT . $news_media; ?>" class="img-fluid img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;">
-                                                <a href="<?= PROOT; ?>blog?delete_np=<?= $_GET['id']; ?>&image=<?= $news_media; ?>" class="badge bg-danger">Change Image</a>
+                                                <a href="<?= PROOT; ?>.in/blog?delete_np=<?= $_GET['id']; ?>&image=<?= $news_media; ?>" class="badge bg-danger">Change Image</a>
                                             </div>
                                             <?php else: ?>
                                             <div class="mb-3">
@@ -373,7 +385,7 @@
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary" name="submitNews" id="submitNews"><?= (isset($_GET['status']) && $_GET['status'] == 'edit_news') ? 'Update': 'Create'; ?> News</button>
                                                 <?php if (isset($_GET['status']) && $_GET['status'] == 'edit_news'): ?>
                                                     <br><br>
-                                                    <a href="<?= PROOT; ?>blog/all" class="button text-secondary">Cancel</a>
+                                                    <a href="<?= PROOT; ?>.in/blog/all" class="button text-secondary">Cancel</a>
                                                 <?php endif ?>
                                             </div>
                                         </form>
@@ -394,37 +406,37 @@
                                 <?php endif; ?>
                             <?php else: ?>
                                 <ul class="list-group">
-                                    <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <a href="<?= PROOT; ?>.in/index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                         <span class="menu-item"><i class="bi bi-house"></i> Home</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">
-                                    <a href="<?= PROOT; ?>blog/all" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <a href="<?= PROOT; ?>.in/blog/all" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                         <span class="menu-item"><i class="bi bi-eye-fill"></i> View all news</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">
-                                    <a href="<?= PROOT; ?>blog/category" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <a href="<?= PROOT; ?>.in/blog/category" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                         <span class="menu-item"><i class="bi bi-tag"></i> Categories</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">
-                                    <a href="<?= PROOT; ?>blog/add" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <a href="<?= PROOT; ?>.in/blog/add" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                         <span class="menu-item"><i class="bi bi-building-add"></i> Add news</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">
-                                    <a href="<?= PROOT; ?>blog/subscribers" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <a href="<?= PROOT; ?>.in/blog/subscribers" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                         <span class="menu-item"><i class="bi bi-person-up"></i> Subscribers</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">
-                                    <a href="<?= PROOT; ?>blog" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <a href="<?= PROOT; ?>.in/blog" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                         <span class="menu-item"><i class="bi bi-arrow-clockwise"></i> Refresh</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>
                                     <hr aria-hidden="true" class="menu-hr">
-                                    <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
+                                    <a href="<?= PROOT; ?>.in/index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
                                         <span class="menu-item"><i class="bi bi-arrow-90deg-left"></i> Main Menu</span>
                                         <span class=""><i class="bi bi-arrow-right"></i></span>
                                     </a>

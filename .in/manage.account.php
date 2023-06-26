@@ -1,5 +1,5 @@
 <?php 
-    require_once ("db_connection/conn.php");
+    require_once ("../db_connection/conn.php");
     if (!admin_is_logged_in()) {
         admn_login_redirect();
     }
@@ -32,9 +32,10 @@
                     if (isset($result)) {
                         // code...
                         $_SESSION['flash_success'] = 'Account info updated!';
-                        redirect(PROOT . 'manage.account');
+                        redirect(PROOT . '.in/manage.account');
                     } else {
-                        echo js_alert('Something went wrong, please try again!');
+                        $_SESSION['flash_error'] = 'Something went wrong, please try again!';
+                        redirect(PROOT . '.in/manage.account');
                     }
                 }
             } else {
@@ -55,13 +56,13 @@
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
                         <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . Dashboard</h2>
-                        <a href="<?= PROOT; ?>index" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> ^ Home</a>
+                        <a href="<?= PROOT; ?>.in" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> ^ Home</a>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
                         <div class="btn-group me-2">
 
-                            <img class="me-3" src="dist/media/logo/logo.png" alt="" width="48" height="38">
+                            <img class="me-3" src="<?= PROOT; ?>dist/media/logo/logo.png" alt="" width="48" height="38">
                             <div class="lh-1">
                                 <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;"><?= strtoupper($admin_data['admin_fullname']); ?></h1>
                                 <span style="font-size: 12px; line-height: 16px;"><?= $admin_data['admin_email'] ?></span><br>   
@@ -72,7 +73,7 @@
                             <div class="btn-group me-2">
                                 <button type="button" class="text-white" style="background-color: transparent; border: none;">...</button>
                             </div>
-                            <a href="<?= PROOT; ?>auth/manage.password" class="btn btn-sm btn-outline-secondary">
+                            <a href="<?= PROOT; ?>.in/auth/manage.password" class="btn btn-sm btn-outline-secondary">
                                 Change password
                             </a>
                         </div>

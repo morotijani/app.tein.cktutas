@@ -1,5 +1,5 @@
 <?php 
-    require_once ("../db_connection/conn.php");
+    require_once ("../../db_connection/conn.php");
     include ("../includes/header.php");
 
     if (admin_is_logged_in()) {

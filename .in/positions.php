@@ -1,5 +1,5 @@
 <?php 
-    require_once ("db_connection/conn.php");
+    require_once ("../db_connection/conn.php");
     if (!admin_is_logged_in()) {
         admn_login_redirect();
     }
@@ -24,16 +24,14 @@
             // code...
             $position =  (isset($_POST['position']) ? sanitize($_POST['position']) : $row[0]['position_name']);
         } else {
-            echo js_alert('Something went wrong, please try again');
-            redirect(PROOT . 'positions');
+            $_SESSION['flash_error'] = 'Something went wrong, please try again';
+            redirect(PROOT . '.in/positions');
         }
     }
 
     // ADD POSITION
     if (isset($_POST['submit'])) {
         if (!empty($position)) {
-
-            echo $id;
 
             $check = $conn->query("SELECT * FROM tein_position WHERE position_name = '".$position."'")->rowCount();
             if (isset($_GET['edit']) && !empty($_GET['edit'])) {
@@ -59,10 +57,10 @@
                 $result = $statement->execute([$position]);
                 if (isset($result)) {
                     $_SESSION['flash_success'] = ucwords($position) . ' successfully '.((isset($_GET['edit'])) ? 'updated' : 'added') . '!';            
-                    redirect(PROOT . 'positions');
+                    redirect(PROOT . '.in/positions');
                 } else {
                     echo js_alert('Something went wrong, please try again');
-                    redirect(PROOT . 'positions');
+                    redirect(PROOT . '.in/positions');
                 }
             }
         } else {
@@ -77,10 +75,10 @@
         $query = $conn->query("DELETE FROM tein_position WHERE id = $delete")->execute();
         if ($query) {
             $_SESSION['flash_success'] = 'Position deleted!';            
-            redirect(PROOT . 'positions');
+            redirect(PROOT . '.in/positions');
         } else {
             echo js_alert('Something went wrong, please try again');
-            redirect(PROOT . 'positions');
+            redirect(PROOT . '.in/positions');
         }
     }
     
@@ -103,7 +101,7 @@
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
                         <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . Positions</h2>
-                        <a href="add.member" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add Member</a>
+                        <a href="<?= PROOT; ?>.in/add.member" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add Member</a>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
@@ -120,7 +118,7 @@
                             <div class="btn-group me-2">
                                 <button type="button" class="text-white" style="background-color: transparent; border: none;">...</button>
                             </div>
-                            <a href="index" class="btn btn-sm btn-outline-secondary">
+                            <a href="<?= PROOT; ?>.in/index" class="btn btn-sm btn-outline-secondary">
                                 Menu
                             </a>
                         </div>
@@ -155,11 +153,11 @@
                                     <?php $i = 1; foreach ($result as $row): ?>
                                     <tr>
                                         <td>
-                                            <a class="badge bg-secondary text-decoration-none" href="<?= PROOT; ?>positions?edit=<?= $row['id']; ?>">Edit</a>
+                                            <a class="badge bg-secondary text-decoration-none" href="<?= PROOT; ?>.in/positions?edit=<?= $row['id']; ?>">Edit</a>
                                         </td>
                                         <td><?= ucwords($row['position_name']); ?></td>
                                         <td>
-                                            <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>positions?delete=<?= $row['id']; ?>">Delete</a>
+                                            <a class="badge bg-danger text-decoration-none" href="<?= PROOT; ?>.in/positions?delete=<?= $row['id']; ?>">Delete</a>
                                         </td>
                                     </tr>
                                     <?php $i++; endforeach; ?>

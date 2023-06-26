@@ -29,7 +29,7 @@
 	                $this->output .= "
 	                	<tr>
 		                    <td>
-		                        <a class='badge bg-secondary text-decoration-none' href='" . PROOT . "blog/category/edit_category/" . $category['id'] . "'>Edit</a>
+		                        <a class='badge bg-secondary text-decoration-none' href='" . PROOT . ".in/blog/category/edit_category/" . $category['id'] . "'>Edit</a>
 		                    </td>
 		                    <td>" . ucwords($category['category']) . "</td>
 		                    <td>" . pretty_date($category['createdAt']) . "</td>
@@ -42,7 +42,7 @@
 								    		<div class='modal-body'>
 								      			<p>When you delete this categoy, all news and details under it will be deleted as well.</p>
 								        		<button type='button' class='btn btn-sm btn-secondary' data-bs-dismiss='modal'>Close</button>
-								        		<a href='" . PROOT . "blog/category/delete/" . $category['id'] . "' class='btn btn-sm btn-outline-secondary'>Confirm Delete.</a>
+								        		<a href='" . PROOT . ".in/blog/category/delete/" . $category['id'] . "' class='btn btn-sm btn-outline-secondary'>Confirm Delete.</a>
 								      		</div>
 								    	</div>
 								 	</div>
@@ -101,7 +101,7 @@
 						          	<h3 class="mb-0">' . $row["news_title"] . '</h3>
 						          	<div class="mb-1 text-body-secondary">' . pretty_month_and_day($row["ca"]) . '</div>
 						          	<p class="mb-auto">' . substr($row['news_content'], 0, 90) . ' ...</p>
-						          	<a href="' . PROOT . 'news/view/' . $row["news_url"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
+						          	<a href="' . PROOT . 'view/' . $row["news_url"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
 						            	Continue reading
 						            	<svg class="bi"><use xlink:href="#chevron-right"/></svg>
 						          	</a>

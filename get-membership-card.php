@@ -27,7 +27,7 @@
                     <div class="card-body">
                         <h1 class="display-5 fw-bold">Get membership card</h1>
                         <p class="small text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis beatae pariatur ad voluptatum cum voluptates molestiae consequuntur sunt debitis voluptas omnis ipsam quod harum quos, nesciunt, tempora tempore sapiente ducimus.</p>
-                        <a href="news/"><< go back</a>
+                        <a href="<?= PROOT; ?>"><< go back</a>
                     </div>
                 </div>
 
@@ -183,15 +183,6 @@
                                 <option value=""></option>
                                 <option value="No">No</option>
                                 <option value="Yes">Yes</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-4 position" style="display: none;">
-                            <label for="position">Position</label>
-                            <select name="position" id="position" class="form-control form-control-sm">
-                                <option value="">...</option>
-                                <?php foreach ($conn->query("SELECT * FROM tein_position ORDER BY position_name ASC")->fetchAll() as $row): ?>
-                                <option><?= ucwords($row['position_name']); ?></option>
-                                <?php endforeach; ?>
                             </select>
                         </div>
 

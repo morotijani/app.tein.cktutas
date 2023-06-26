@@ -34,7 +34,7 @@
                     var form_data = new FormData();
                     form_data.append("passport", property);
                     $.ajax({
-                        url: "<?= PROOT; ?>auth/temporary.upload.php",
+                        url: "<?= PROOT; ?>.in/auth/temporary.upload.php",
                         method: "POST",
                         data: form_data,
                         contentType: false,
@@ -56,7 +56,7 @@
                 var tempuploded_file_id = $(this).attr('id');
 
                 $.ajax ({
-                    url: "<?= PROOT; ?>auth/delete.temporary.uploaded.php",
+                    url: "<?= PROOT; ?>.in/auth/delete.temporary.uploaded.php",
                     method: "POST",
                     data:{
                         tempuploded_file_id : tempuploded_file_id
@@ -95,7 +95,7 @@
                     var form_data = new FormData();
                     form_data.append("news_media", property);
                     $.ajax({
-                        url: "<?= PROOT; ?>auth/temporary.upload.news.php",
+                        url: "<?= PROOT; ?>.in/auth/temporary.upload.news.php",
                         method: "POST",
                         data: form_data,
                         contentType: false,

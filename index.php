@@ -1,97 +1,73 @@
 <?php 
     require_once ("db_connection/conn.php");
-    if (!admin_is_logged_in()) {
-        admn_login_redirect();
-    }
-    include ("includes/header.php");
 
-?> 
+    $News = new News;
+    $Category = new Category;
 
+    include ('news.header.php');
 
-    <div class="container-fluid">
-        <main style="background-color: rgb(51, 51, 51);">
-            <div class="row justify-content-center">
-                <div class="col-md-4">
+    $total = $conn->query("SELECT * FROM tein_news WHERE news_featured = 0 AND news_status = 0")->rowCount();
+    $per_page = 10;
+    $current_page = ((isset($_GET['page']) && !empty($_GET['page'])) ? $_GET['page'] : 1);
 
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
-                        <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . Dashboard</h2>
-                        <a href="add.member" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> + Add Member</a>
-                    </div>
+    $pagination = new Pagination($current_page, $total, $per_page);
+    $offset = $pagination->offSet();
+    $hasNext = $pagination->hasNextPage();
+    $hasPrev = $pagination->hasPrevPage();
 
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
-                        <div class="btn-group me-2">
+    echo $News->fetch_oneFeaturedNews($conn); 
+?>
 
-                            <img class="me-3" src="dist/media/logo/logo.png" alt="" width="48" height="38">
-                            <div class="lh-1">
-                                <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;"><?= strtoupper($admin_data['admin_fullname']); ?></h1>
-                                <span style="font-size: 12px; line-height: 16px;"><?= $admin_data['admin_email'] ?></span><br>   
-                                <span style="align-items: center; flex-direction: row;">😎 singed in.</span>
-                            </div>
-                        </div>
-                        <div class="btn-toolbar mb-2 mb-md-0">
-                            <div class="btn-group me-2">
-                                <button type="button" class="text-white" style="background-color: transparent; border: none;">...</button>
-                            </div>
-                            <a href="auth/logout" class="btn btn-sm btn-outline-secondary">
-                                Sign out
-                            </a>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="text-white w-100 h-100" style="z-index: 5; padding: 4px 0px; margin-bottom: 20px; transition: all 0.2s ease-in-out; background: #3B3B3B; border-radius: 4px; box-shadow: 0px 1.6px 3.6px rgb(0 0 0 / 25%), 0px 0px 2.9px rgb(0 0 0 / 22%);">
-                            <ul class="list-group">
-                                <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-house"></i> Home</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>positions" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person-check"></i> Positions</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>executives" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person-check"></i> Executives</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>members" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-people"></i> Members</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>blog" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-newspaper"></i> News</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>manage.account" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person"></i> Manage account</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>personal.info" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-person-lock"></i> Personal info</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>index" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-arrow-clockwise"></i> Refresh</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                                <hr aria-hidden="true" class="menu-hr">
-                                <a href="<?= PROOT; ?>auth/logout" class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-0">
-                                    <span class="menu-item"><i class="bi bi-box-arrow-left"></i> Log out</span>
-                                    <span class=""><i class="bi bi-arrow-right"></i></span>
-                                </a>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </main>
+    <div class="row mb-2">
+        <?= $News->fetchFeaturedNews($conn); ?>
     </div>
 
-<?php include ("includes/footer.php"); ?>
+    <div class="row g-5">
+        <div class="col-md-8">
+            <h3 class="pb-4 mb-4 fst-italic border-bottom">
+                From the Firehose
+            </h3>
+            <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 690px;">
+                <?= $News->fetchNews($conn, $offset, $per_page); ?>
+            </div>
+
+            <nav class="blog-pagination" aria-label="Pagination">
+                <a class="btn btn-outline-success rounded-pill <?= (($hasPrev) ? '' : 'disabled'); ?>" href="<?= (($hasPrev) ? '?page=' . $current_page - 1 .'' : 'javascript:;'); ?>">Older</a>
+                <a class="btn btn-outline-secondary rounded-pill <?= (($hasNext) ? '' : 'disabled'); ?>" href="<?= (($hasNext) ? '?page=' . $current_page + 1 .'' : 'javascript:;'); ?>">Newer</a>
+            </nav>
+        </div>
+
+        <?php include ('news.left.side.php'); ?>
+    </div>
+    
+<?php include ('news.footer.php'); ?>
+
+<!-- AUTO POP UP Modal -->
+<div class="modal fade" id="autoModal" tabindex="-1" aria-labelledby="autoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="autoModalLabel">Modal title</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              pay dues
+              get membership card
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+      </div>
+    </div>
+</div>
+
+<script>
+    $(window).on('load', function() {
+        var delayMs = 1500; // delay in milliseconds
+
+        setTimeout(function() {
+            $('#autoModal').modal('show');
+        }, delayMs);
+    });
+</script>

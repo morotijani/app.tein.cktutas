@@ -1,16 +1,15 @@
 <?php 
-    require_once ("../db_connection/conn.php");
+    require_once ("db_connection/conn.php");
 
     $News = new News;
     $Category = new Category;
-    $Search = new Search;
 
     include ('news.header.php');
 
-    if (isset($_GET['q']) && !empty($_GET['q'])) {
-        $q = sanitize($_GET['q']);
+    if (isset($_GET['url']) && !empty($_GET['url'])) {
+        $url = sanitize($_GET['url']);
     } else {
-        redirect(PROOT . 'news');
+        redirect(PROOT);
     }
 ?>
 
@@ -21,11 +20,11 @@
             </h3>
             <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 690px;">
                 <?php 
-                    $search = $Search->fetchSearchNews($conn, $q);
-                    if ($search == false) {
-                        //redirect(PROOT . 'news');
+                    $news = $Category->fetchCategoryNews($conn, $url);
+                    if ($news == false) {
+                        redirect(PROOT);
                     } else {
-                        echo $search;
+                        echo $news;
                     }
                 ?>
             </div>

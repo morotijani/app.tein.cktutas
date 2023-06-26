@@ -2,19 +2,19 @@
 
 	// Upload Post Image And Save To Draft 
 
-	require_once ('../db_connection/conn.php');
+	require_once ('../../db_connection/conn.php');
 
-	if ($_FILES["news_media"]["name"]  != '') {
+	if ($_FILES["passport"]["name"]  != '') {
 
-		$test = explode(".", $_FILES["news_media"]["name"]);
+		$test = explode(".", $_FILES["passport"]["name"]);
 
 		$extention = end($test);
 
 		$name = rand(100, 999) . '.' . $extention;
 
-		$location = BASEURL . 'dist/media/temporary/' . $name;
+		$location = BASEURL.'dist/media/temporary/'.$name;
 
-		move_uploaded_file($_FILES["news_media"]["tmp_name"], $location);
+		move_uploaded_file($_FILES["passport"]["tmp_name"], $location);
 
 		echo '
 				<div id="removeTempuploadedFile">

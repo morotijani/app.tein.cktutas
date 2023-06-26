@@ -27,11 +27,12 @@
 		        INNER JOIN tein_category 
 		        ON tein_category.id = tein_news.news_category 
 		        INNER JOIN tein_admin 
-		        ON tein_admin.admin_id = tein_news.news_created_by
+		        ON tein_admin.admin_id = tein_news.news_created_by 
+		        WHERE tein_news.news_status = ?
 		        ORDER BY tein_news.id DESC 
 		    ";
 		    $statement = $conn->prepare($query);
-		    $statement->execute();
+		    $statement->execute([0]);
 		    $news = $statement->fetchAll();
 		    if ($statement->rowCount() > 0) {
 		    	// code...
@@ -45,12 +46,12 @@
 		                    <td>" . pretty_date($new['createdAt']) . "</td>
 		                    <td>" . ucwords($new['admin_fullname']) . "</td>
 		                    <td>
-		                    	<a class='badge bg-" . (($new['news_featured'] == 1) ? 'secondary' : 'primary') . " text-decoration-none' href='" . PROOT . 'blog/add/featured/' . $new['news_id'] . '/' . (($new['news_featured'] == 0) ? 1 : 2) . "'>" . (($new['news_featured'] == 1) ? 'featured' : '+ featured') . "</a>
+		                    	<a class='badge bg-" . (($new['news_featured'] == 1) ? 'secondary' : 'primary') . " text-decoration-none' href='" . PROOT . '.in/blog/add/featured/' . $new['news_id'] . '/' . (($new['news_featured'] == 0) ? 1 : 2) . "'>" . (($new['news_featured'] == 1) ? 'featured' : '+ featured') . "</a>
 		                    </td>
 		                    <td>
 		                        <a class='badge bg-primary text-decoration-none' href='javascript:;' data-bs-toggle='modal' data-bs-target='#viewModal" . $this->i . "'>View</a>
 		                        <a href='javascript:;' class='badge bg-danger text-decoration-none' data-bs-toggle='modal' data-bs-target='#deleteModal" . $this->i . "'>Delete</a>
-		                        <a class='badge bg-secondary text-decoration-none' href='" . PROOT . "blog/add/edit_news/" . $new['news_id'] . "'>Edit</a>
+		                        <a class='badge bg-secondary text-decoration-none' href='" . PROOT . ".in/blog/add/edit_news/" . $new['news_id'] . "'>Edit</a>
 
 		                        <!-- VIEW DETAILS MODAL -->
 								<div class='modal fade' id='viewModal" . $this->i . "' tabindex='-1' aria-labelledby='viewModalLabel' aria-hidden='true' data-bs-backdrop='static' data-bs-keyboard='false'>
@@ -86,7 +87,7 @@
 								    		<div class='modal-body'>
 								      			<p>When you delete this categoy, all news and details under it will be deleted as well.</p>
 								        		<button type='button' class='btn btn-sm btn-secondary' data-bs-dismiss='modal'>Close</button>
-								        		<a href='" . PROOT . "blog/add/delete/" . $new['news_id'] . "' class='btn btn-sm btn-outline-secondary'>Confirm Delete.</a>
+								        		<a href='" . PROOT . ".in/blog/add/delete/" . $new['news_id'] . "' class='btn btn-sm btn-outline-secondary'>Confirm Delete.</a>
 								      		</div>
 								    	</div>
 								 	</div>
@@ -163,9 +164,10 @@
 			}
 		}
 
+		// delete news by setting status to 1
 		public function deleteNews($conn, $id) {
 	        $query = "
-	        	UPDATE tein_category 
+	        	UPDATE tein_news 
 	        	SET news_status = ?
 	        	WHERE id = ?
 	        ";
@@ -202,7 +204,7 @@
 					          	<h3 class="mb-0">' . $row["news_title"] . '</h3>
 					          	<div class="mb-1 text-body-secondary">' . pretty_month_and_day($row["ca"]) . '</div>
 					          	<p class="mb-auto">' . substr($row['news_content'], 0, 90) . ' ...</p>
-					          	<a href="' . PROOT . 'news/view/' . $row["news_url"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
+					          	<a href="' . PROOT . 'view/' . $row["news_url"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
 					            	Continue reading
 					            	<svg class="bi"><use xlink:href="#chevron-right"/></svg>
 					          	</a>
@@ -239,7 +241,7 @@
 				          		<h3 class="mb-0">' . ucwords($row["news_title"]) . '</h3>
 				          		<div class="mb-1 text-body-secondary">' . pretty_month_and_day($row["ca"]) . '</div>
 				          		<p class="card-text mb-auto">' . substr($row['news_content'], 0, 85) . ' ...</p>
-				          		<a href="' . PROOT . 'news/view/' . $row["news_url"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
+				          		<a href="' . PROOT . 'view/' . $row["news_url"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
 				            		Continue reading
 				            		<svg class="bi"><use xlink:href="#chevron-right"/></svg>
 				          		</a>
@@ -275,7 +277,7 @@
 			            <div class="col-lg-6 px-0">
 			                <h1 class="display-4 fst-italic">' . ucwords($row["news_title"]) . '</h1>
 			                <p class="lead my-3">' . substr($row['news_content'], 0, 115) . ' ...</p>
-			                <p class="lead mb-0"><a href="' . PROOT . 'news/view/' . $row["news_url"] . '" class="text-body-emphasis fw-bold">Continue reading...</a></p>
+			                <p class="lead mb-0"><a href="' . PROOT . 'view/' . $row["news_url"] . '" class="text-body-emphasis fw-bold">Continue reading...</a></p>
 			            </div>
 			        </div>
 				';
@@ -303,7 +305,7 @@
 				return '
 					<article class="blog-post">
 				        <h2 class="display-5 link-body-emphasis mb-1">' . ucwords($row[0]["news_title"]) . '</h2>
-				        <p class="blog-post-meta">' . pretty_date_notime($row[0]['ca']) . ' by <a href="#">' . ucwords($row[0]['admin_fullname']) . '</a> . ' . $row[0]["news_views"] . ' view' . (($row[0]["news_views"] > 1) ? 's' : '') . '</p>
+				        <p class="blog-post-meta">' . pretty_date_notime($row[0]['ca']) . ' by <a href="javascript:;">' . ucwords($row[0]['admin_fullname']) . '</a> . ' . $row[0]["news_views"] . ' view' . (($row[0]["news_views"] > 1) ? 's' : '') . '</p>
 				        <img src="' . PROOT . $row[0]["news_media"] .'" class="img-fluid">
 				        <p class="mt-4">' . nl2br($row[0]['news_content']) . '</p>
 				    </article>
@@ -382,7 +384,7 @@
 								    		<div class="modal-body">
 								      			<p>When you delete this subscriber, this subscriber will no longer be able to receive daily updates on news.</p>
 								        		<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-								        		<a href=' . PROOT . "blog/subscribers/delete_subscriber/" . $row['id'] . ' class="btn btn-sm btn-outline-secondary">Confirm Delete.</a>
+								        		<a href=' . PROOT . ".in/blog/subscribers/delete_subscriber/" . $row['id'] . ' class="btn btn-sm btn-outline-secondary">Confirm Delete.</a>
 								      		</div>
 								    	</div>
 								 	</div>
@@ -439,7 +441,7 @@
 					// code...
 					$this->output_poupular .= '
 						<li>
-	                        <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="'. PROOT .'news/view/' . $row['news_url'] . '">
+	                        <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="'. PROOT .'view/' . $row['news_url'] . '">
 	                        <img src="' . PROOT . $row['news_media'] . '" class="bd-placeholder-img" width="100%" height="96" style="object-position: center; object-fit: cover;">
 	                            <div class="col-lg-8">
 	                                <h6 class="mb-0">' . substr($row["news_title"], 0, 49) . '</h6>

@@ -24,7 +24,6 @@
                     <div class="card-body">
                         <h1 class="display-5 fw-bold">Pay your dues</h1>
                         <p class="small text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis beatae pariatur ad voluptatum cum voluptates molestiae consequuntur sunt debitis voluptas omnis ipsam quod harum quos, nesciunt, tempora tempore sapiente ducimus.</p>
-                        <a href="news/"><< go back</a>
                     </div>
                 </div>
 
@@ -50,7 +49,7 @@
                             <button onclick="payWithPaystack()" class="btn btn-outline-success" name="submit" id="submit">Pay dues</button>
                             <br>
                             <br>
-                            <a href="<?= PROOT; ?>news" class="text-secondary"><< go back.</a>
+                            <a href="<?= PROOT; ?>" class="text-secondary"><< go back.</a>
                         </div>
                     </div>
                 </form>
@@ -58,7 +57,7 @@
             </div>
         </div>
     </div>
-    <?php include ("includes/footer.php"); ?>
+    <?php include (".in/includes/footer.php"); ?>
     <script src="https://js.paystack.co/v1/inline.js"></script> 
     <script>
 

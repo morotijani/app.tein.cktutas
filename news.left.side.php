@@ -32,7 +32,7 @@
                                 $month = date("F", $time);
                                 $year = date("Y", $time);
 
-                                echo '<li><a href="' . PROOT . 'news/search/' . $row['month'] . '">' . $month. ' ' . $year . '</a></li>';
+                                echo '<li><a href="' . PROOT . 'search/' . $row['month'] . '">' . $month. ' ' . $year . '</a></li>';
                             }
                         ?>
                     </ol>

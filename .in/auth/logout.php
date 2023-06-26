@@ -2,10 +2,10 @@
 
 	// USER SIGNOUT PAGE
 
-    require_once ("../db_connection/conn.php");
+    require_once ("../../db_connection/conn.php");
 
     unset($_SESSION['TNAdmin']);
 
     session_destroy();
 
-	redirect(PROOT . 'auth/signin');
+	redirect(PROOT . '.in/auth/signin');

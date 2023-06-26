@@ -1,5 +1,5 @@
 <?php 
-    require_once ("../db_connection/conn.php");
+    require_once ("../../db_connection/conn.php");
     include ("../includes/header.php");
 
     if (!admin_is_logged_in()) {
@@ -16,7 +16,6 @@
     $confirm = trim($confirm);
     $new_hashed = password_hash($password, PASSWORD_BCRYPT);
     $admin_id = $admin_data['admin_id'];
-    echo $admin_id;
 
     if ($_POST) {
         if (empty($_POST['old_password']) || empty($_POST['password']) || empty($_POST['confirm'])) {
@@ -53,7 +52,7 @@
             );
             if (isset($result)) {
                 $_SESSION['flash_success'] = 'Password successfully changed</div>';
-                redirect(PROOT . "manage.account");
+                redirect(PROOT . ".in/manage.account");
             }
         }
     }
@@ -69,7 +68,7 @@
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3" style="margin-top: 34px;">
                         <h2 class="text-white" style="font-weight: 600; font-size: 20px; line-height: 28px;">TEIN . Change password</h2>
-                        <a href="<?= PROOT; ?>index" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> ^ Home</a>
+                        <a href="<?= PROOT; ?>.in" class="btn btn-sm btn-outline-secondary" style="background: #333333;"> ^ Home</a>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">

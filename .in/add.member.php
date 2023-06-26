@@ -1,5 +1,5 @@
 <?php 
-    require_once ("db_connection/conn.php");
+    require_once ("../db_connection/conn.php");
     include ("includes/header.php");
 
     $Allfunctions = new AllFunctions();
@@ -75,6 +75,10 @@
     }
 
     if (isset($_POST['submit'])) {
+        if ($_POST['uploaded_image'] != '') {
+            unlink($_POST['uploaded_image']);
+        }
+                    
         $memberQuery = "
             SELECT * FROM tein_membership 
             WHERE membership_email = '".$_POST['email']."'
@@ -103,9 +107,7 @@
                     $location = 'dist/media/membership/'.$image_name;
                     move_uploaded_file($_FILES["passport"]["tmp_name"], BASEURL . $location);
                     
-                    if ($_POST['uploaded_image'] != '') {
-                        unlink($_POST['uploaded_image']);
-                    }
+                    
                 } else {
                     $message = '<div class="alert alert-danger">Passport Picture Can not be Empty</div>';
                 }
@@ -129,7 +131,7 @@
                     $resultQ = $statement->execute($mergeData);
                     if (isset($resultQ)) {
                         $_SESSION['flash_success'] = ucwords($row["membership_fname"]) .' successfully <span class="bg-info">Updated</span>';
-                        redirect(PROOT . 'members');
+                        redirect(PROOT . '.in/members');
                     }
                 } else {
                     $query = "
@@ -146,7 +148,7 @@
 
                     if (isset($result)) {
                         $_SESSION['flash_success'] = 'New Member successfully <span class="bg-info">Added</span>';
-                        redirect(PROOT . 'members');
+                        redirect(PROOT . '.in/members');
                     }
                 }
             } else {
@@ -177,7 +179,7 @@
             ]
         );
         $_SESSION['flash_success'] = 'Member Passport deleted, upload new one';
-        redirect(PROOT . 'add.member?edit=1&id='.(int)$_GET["mid"]);
+        redirect(PROOT . '.in/add.member?edit=1&id='.(int)$_GET["mid"]);
     }
 
     // DELETE MEMBER TEMPORARY
@@ -215,8 +217,8 @@
             ':product_id'    => $restore_id
         ]);
 
-        $_SESSION['flash_success'] = 'Product successfully <span class="bg-info">Restored</span>';
-        echo '<script>window.location = "'.PROOT.'admin/products"</script>';
+        $_SESSION['flash_success'] = 'Member successfully <span class="bg-info">Restored</span>';
+        echo '<script>window.location = "'.PROOT.'.in/members"</script>';
     }
 ?> 
 
@@ -234,7 +236,7 @@
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm text-white user-banner">
                         <div class="btn-group me-2">
 
-                            <img class="me-3" src="dist/media/logo/logo.png" alt="" width="48" height="38">
+                            <img class="me-3" src="<?= PROOT; ?>dist/media/logo/logo.png" alt="" width="48" height="38">
                             <div class="lh-1">
                                 <h1 class="h6 mb-0 text-white lh-1" style="font-size: 16px; white-space: nowrap; text-overflow: ellipsis; font-weight: 700;"><?= strtoupper($admin_data['admin_fullname']); ?></h1>
                                 <span style="font-size: 12px; line-height: 16px;"><?= $admin_data['admin_email'] ?></span><br>   
@@ -397,8 +399,8 @@
                                     <?php if ($passport != ''): ?>
                                     <div class="mb-3">
                                         <label>Product Image</label><br>
-                                        <img src="<?= $passport; ?>" class="img-fluid img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;">
-                                        <a href="<?= PROOT; ?>add.member?dpp=1&mid=<?= $edit_id; ?>&pp=<?= $passport; ?>" class="badge bg-danger">Change Image</a>
+                                        <img src="<?= PROOT . $passport; ?>" class="img-fluid img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;">
+                                        <a href="<?= PROOT; ?>.in/add.member?dpp=1&mid=<?= $edit_id; ?>&pp=<?= $passport; ?>" class="badge bg-danger">Change Image</a>
                                     </div>
                                     <?php else: ?>
                                     <div class="mb-3">

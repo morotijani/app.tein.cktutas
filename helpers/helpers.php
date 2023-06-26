@@ -211,7 +211,7 @@ function adminLogin($admin_id) {
 	$result = $statement->execute($data);
 	if (isset($result)) {
 		$_SESSION['flash_success'] = '<div class="text-center" id="temporary">You are now logged in!</div>';
-		redirect(PROOT . 'index');
+		redirect(PROOT . '.in/index');
 	}
 }
 
@@ -225,13 +225,13 @@ function admin_is_logged_in(){
 // Redirect admin if !logged in
 function admn_login_redirect($url = 'signin') {
 	$_SESSION['flash_error'] = '<div class="text-center" id="temporary" style="margin-top: 60px;">You must be logged in to access that page.</div>';
-	redirect(PROOT . 'auth/' . $url);
+	redirect(PROOT . '.in/auth/' . $url);
 }
 
 // Redirect admin if do not have permission
 function admin_permission_redirect($url = 'signin') {
 	$_SESSION['flash_error'] = '<div class="text-center" id="temporary" style="margin-top: 60px;">You do not have permission in to access that page.</div>';
-	redirec(PROOT . 'auth/' . $url);
+	redirec(PROOT . '.in/auth/' . $url);
 }
 
 function admin_has_permission($permission = 'admin') {

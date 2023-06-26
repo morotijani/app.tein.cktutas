@@ -1,5 +1,5 @@
 <?php 
-    require_once ("../db_connection/conn.php");
+    require_once ("db_connection/conn.php");
 
     $News = new News;
     $Category = new Category;
@@ -22,7 +22,7 @@
             <?php 
                 $view = $News->singleView($conn, $newsUrl);
                 if ($view == false) {
-                    redirect(PROOT . 'news/');
+                    redirect(PROOT);
                 } else {
                     $News->updateViews($conn, $newsUrl);
                     echo $News->singleView($conn, $newsUrl);
@@ -30,7 +30,7 @@
             ?>
      
             <nav class="blog-pagination" aria-label="Pagination">
-                <a class="btn btn-outline-success rounded-pill" href="<?= PROOT; ?>news/">Go back</a>
+                <a class="btn btn-outline-success rounded-pill" href="<?= PROOT; ?>">Go back</a>
             </nav>
 
         </div>

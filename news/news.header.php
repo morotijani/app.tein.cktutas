@@ -174,8 +174,9 @@
         <header class="border-bottom lh-1 py-3">
             <div class="row flex-nowrap justify-content-between align-items-center">
                 <div class="col-4 pt-1">
-                    <a class="link-secondary" href="javascript:;" data-bs-toggle="modal" data-bs-target="#subscribeModal">Subscribe</a>
-                    <a class="link-secondary" href="members">Members</a>
+                    <a class="link-secondary" href="javascript:;" data-bs-toggle="modal" data-bs-target="#subscribeModal">Subscribe</a>&nbsp;
+                    <a class="link-secondary" href="<?= PROOT; ?>members">Members</a>&nbsp;
+                    <a class="link-danger" href="<?= PROOT; ?>pay.dues">₵Pay Dues</a>
                 </div>
                 <div class="col-4 text-center">
                     <a class="blog-header-logo text-body-emphasis text-decoration-none" href="<?= PROOT; ?>news">TEIN . CKTUTAS</a>

@@ -43,7 +43,7 @@
                     <ol class="list-unstyled">
                         <li><a href="#">Instagram</a></li>
                         <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Facebook</a></li>
+                        <li><a href="https://web.facebook.com/teincktutas">Facebook</a></li>
                     </ol>
                 </div>
             </div>

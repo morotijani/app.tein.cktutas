@@ -1,5 +1,7 @@
 <?php
     require_once ("db_connection/conn.php");
+
+    session_destroy();
 ?>
 
 <!DOCTYPE html>
@@ -169,7 +171,7 @@
                         <div class="mb-3">
                             <div>
                                 <label for="passport" class="form-label">Passpot size Image</label>
-                                <input type="file" class="form-control" id="passport" name="passport" required>
+                                <input type="file" class="form-control" id="passport" name="passport">
                                 <span id="upload_file"></span>
                                 <div class="form-text text-danger passport_msg"></div>
                             </div>
@@ -276,21 +278,7 @@
                 $('.student_msg').html('Student id is required!');
                 return false;
             } else {
-                $.ajax ({
-                    url: '<?= PROOT; ?>controller/check.exist.php',
-                    method : 'POST',
-                    data: {studentId : student_id},
-                    success : function(data) {
-                        if (data == '') {
-                            $('.student_msg').html();
-                            return true
-                        } else {
-                            $('.student_msg').html(data);
-                            return false;
-                        }
-                    }
-                })
-
+                
                 $('.student_msg').html('');
                 if (fname == '') {
                     $('#fname').focus();
@@ -312,21 +300,7 @@
                             $('.email_msg').html('Email required!');
                             return false;
                         } else {
-                            $.ajax ({
-                                url: '<?= PROOT; ?>controller/check.exist.php',
-                                method : 'POST',
-                                data: {email : email},
-                                success : function(data) {
-                                    if (data == '') {
-                                        $('.email_msg').html();
-                                        return true
-                                    } else {
-                                        $('.email_msg').html(data);
-                                        return false;
-                                    }
-                                }
-                            })
-                            
+                       
                             $('.student_msg').html('');
                             $('.fname_msg').html('');
                             $('.lname_msg').html('');
@@ -507,7 +481,39 @@
                                                                     }
                                                                 });
 
-                                                                handler.openIframe();
+                                                                $.ajax ({
+                                                                    url: '<?= PROOT; ?>controller/check.exist.php',
+                                                                    method : 'POST',
+                                                                    data: {studentId : student_id},
+                                                                    success : function(data) {
+                                                                        if (data == '') {
+
+                                                                            $('.student_msg').html();
+
+                                                                            $.ajax ({
+                                                                                url: '<?= PROOT; ?>controller/check.exist.php',
+                                                                                method : 'POST',
+                                                                                data: {email : email},
+                                                                                success : function(data) {
+                                                                                    if (data == '') {
+                                                                                        $('.email_msg').html();
+
+                                                                                        handler.openIframe();
+
+                                                                                    } else {
+                                                                                        $('.email_msg').html(data);
+                                                                                        $('#email').focus()
+                                                                                        return false;
+                                                                                    }
+                                                                                }
+                                                                            })
+                                                                        } else {
+                                                                            $('.student_msg').html(data);
+                                                                            $('#student_id').focus()
+                                                                            return false;
+                                                                        }
+                                                                    }
+                                                                })
                                                             }
                                                         }
                                                     }
@@ -521,7 +527,6 @@
                     }
                 }
             }
-
         }
     </script>
 

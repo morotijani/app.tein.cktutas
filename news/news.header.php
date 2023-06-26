@@ -175,6 +175,7 @@
             <div class="row flex-nowrap justify-content-between align-items-center">
                 <div class="col-4 pt-1">
                     <a class="link-secondary" href="javascript:;" data-bs-toggle="modal" data-bs-target="#subscribeModal">Subscribe</a>
+                    <a class="link-secondary" href="members">Members</a>
                 </div>
                 <div class="col-4 text-center">
                     <a class="blog-header-logo text-body-emphasis text-decoration-none" href="<?= PROOT; ?>news">TEIN . CKTUTAS</a>

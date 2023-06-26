@@ -42,3 +42,32 @@
     
 <?php include ('news.footer.php'); ?>
 
+<!-- AUTO POP UP Modal -->
+<div class="modal fade" id="autoModal" tabindex="-1" aria-labelledby="autoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="autoModalLabel">Modal title</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              pay dues
+              get membership card
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+      </div>
+    </div>
+</div>
+
+<script>
+    $(window).on('load', function() {
+        var delayMs = 1500; // delay in milliseconds
+
+        setTimeout(function() {
+            $('#autoModal').modal('show');
+        }, delayMs);
+    });
+</script>

@@ -28,7 +28,7 @@
 	        $statement = $conn->prepare($query);
 	        $statement->execute([$studentid]);
 	        if ($statement->rowCount() > 0) {
-	            echo 'student ID already exist.';
+	            echo 'Student ID already exist.';
 	        } else {
 	        	echo '';
 	        }

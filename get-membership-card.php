@@ -1,8 +1,7 @@
 <?php
-require_once ("db_connection/conn.php");
-    $passport = '';
-
+    require_once ("db_connection/conn.php");
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,28 +33,28 @@ require_once ("db_connection/conn.php");
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="student_id" id="student_id" placeholder="Student Id" value="<?= $student_id; ?>">
+                                <input type="text" class="form-control" name="student_id" id="student_id" placeholder="Student Id">
                                 <label for="student_id">Student Id</label>
                                 <div class="form-text text-danger student_msg"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name" value="<?= $fname; ?>">
+                                <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
                                 <label for="fname">First Name</label>
                                 <div class="form-text text-danger fname_msg"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name" value="<?= $lname; ?>">
+                                <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name">
                                 <label for="lname">Last Name</label>
                                 <div class="form-text text-danger lname_msg"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="email" id="email" placeholder="Email" value="<?= $email; ?>">
+                                <input type="text" class="form-control" name="email" id="email" placeholder="Email">
                                 <label for="email">Email</label>
                                 <div class="form-text text-danger email_msg"></div>
                             </div>
@@ -64,9 +63,9 @@ require_once ("db_connection/conn.php");
                             <div class="form-floating mb-3">
                                 <select type="text" class="form-select" name="sex" id="sex">
                                     <option value="">...</option>
-                                    <option <?= ($sex == 'Male')? "selected" : ""; ?>>Male</option>
-                                    <option <?= ($sex == 'Female')? "selected" : ""; ?>>Female</option>
-                                    <option <?= ($sex == 'Other')? "selected" : ""; ?>>Other</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
                                 </select>
                                 <label for="sex">Sex</label>
                                 <div class="form-text text-danger sex_msg"></div>
@@ -74,21 +73,21 @@ require_once ("db_connection/conn.php");
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="school" id="school" placeholder="School" value="<?= $school ?>">
+                                <input type="text" class="form-control" name="school" id="school" placeholder="School">
                                 <label for="school">School</label>
                                 <div class="form-text text-danger school_msg"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="department" id="department" placeholder="Department" value="<?= $department ?>">
+                                <input type="text" class="form-control" name="department" id="department" placeholder="Department">
                                 <label for="department">Department</label>
                                 <div class="form-text text-danger department_msg"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="programme" id="programme" placeholder="Programme" value="<?= $programme ?>">
+                                <input type="text" class="form-control" name="programme" id="programme" placeholder="Programme">
                                 <label for="programme">Programme</label>
                                 <div class="form-text text-danger programme_msg"></div>
                             </div>
@@ -97,84 +96,76 @@ require_once ("db_connection/conn.php");
                             <div class="form-floating mb-3">
                                 <select type="text" class="form-select" name="level" id="level">
                                     <option value="">...</option>
-                                    <option <?= ($level == 'L100')? "selected" : ""; ?>>L100</option>
-                                    <option <?= ($level == 'L200')? "selected" : ""; ?>>L200</option>
-                                    <option <?= ($level == 'L300')? "selected" : ""; ?>>L300</option>
-                                    <option <?= ($level == 'L400')? "selected" : ""; ?>>L400</option>
+                                    <option>L100</option>
+                                    <option>L200</option>
+                                    <option>L300</option>
+                                    <option>L400</option>
                                 </select>
                                 <label for="level">Level</label>
                             </div>
                         </div>
                         <div class="col-md-6 mb-4">
                             <div class="form-floating mb-3">
-                                <input type="number" min="1900" max="<?= date('Y');?>" step="1" class="form-control form-control-sm" name="yoa" placeholder="Year of Admission" id="yoa" value="<?= $yoa; ?>">
+                                <input type="number" min="1900" max="<?= date('Y');?>" step="1" class="form-control form-control-sm" name="yoa" placeholder="Year of Admission" id="yoa">
                                 <label for="yoa">Year of Admission</label>
                                 <div class="form-text text-danger yoa_msg"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="number" min="1900" max="<?= date('Y') - 1;?>" step="1" class="form-control form-control-sm" name="yoc" id="yoc" placeholder="Year of Completion" value="<?= $yoc; ?>">
+                                <input type="number" min="1900" max="<?= date('Y') - 1;?>" step="1" class="form-control form-control-sm" name="yoc" id="yoc" placeholder="Year of Completion">
                                 <label for="yoc">Year of Completion</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control form-control-sm" name="hostel" id="hostel" placeholder="Name of Hostel" value="<?= $hostel; ?>">
+                                <input type="text" class="form-control form-control-sm" name="hostel" id="hostel" placeholder="Name of Hostel">
                                 <label for="hostel">Name of Hostel</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="region" id="region" placeholder="Region" value="<?= $region; ?>">
+                                <input type="text" class="form-control" name="region" id="region" placeholder="Region">
                                 <label for="region">Region</label>
                                 <div class="form-text text-danger region_msg"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="constituency" id="constituency" placeholder="Constituency" value="<?= $constituency; ?>">
+                                <input type="text" class="form-control" name="constituency" id="constituency" placeholder="Constituency">
                                 <label for="constituency">Constituency</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="branch" id="branch"  placeholder="Branch (Polling Station)" value="<?= $branch; ?>">
+                                <input type="text" class="form-control" name="branch" id="branch"  placeholder="Branch (Polling Station)">
                                 <label for="branch">Branch (Polling Station)</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="WhatsApp Contact" value="<?= $whatsapp; ?>">
+                                <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="WhatsApp Contact">
                                 <label for="whatsapp">WhatsApp Contact</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="telephone" id="telephone" placeholder="Telephone" value="<?= $telephone; ?>">
+                                <input type="text" class="form-control" name="telephone" id="telephone" placeholder="Telephone">
                                 <label for="telephone">Telephone Number</label>
                                 <div class="form-text text-danger telephone_msg"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <select type="text" class="form-select" name="card_type" id="card_type" value="<?= $card_type; ?>">
+                                <select type="text" class="form-select" name="card_type" id="card_type">
                                     <option value="">...</option>
-                                    <option <?= ($card_type == 'Plastic')? "selected" : ""; ?>>Plastic</option>
-                                    <option <?= ($card_type == 'Booklet')? "selected" : ""; ?>>Booklet</option>
+                                    <option>Plastic</option>
+                                    <option>Booklet</option>
                                 </select>
                                 <label for="card_type">Card Type</label>
                                 <div class="form-text text-danger card_type_msg"></div>
                             </div>
                         </div>
-
-                        <?php if ($passport != ''): ?>
-                        <div class="mb-3">
-                            <label>Product Image</label><br>
-                            <img src="<?= $passport; ?>" class="img-fluid img-thumbnail" style="width: 200px; height: 200px; object-fit: cover;">
-                            <a href="<?= PROOT; ?>add.member?dpp=1&mid=<?= $edit_id; ?>&pp=<?= $passport; ?>" class="badge bg-danger">Change Image</a>
-                        </div>
-                        <?php else: ?>
                         <div class="mb-3">
                             <div>
                                 <label for="passport" class="form-label">Passpot size Image</label>
@@ -183,23 +174,21 @@ require_once ("db_connection/conn.php");
                                 <div class="form-text text-danger passport_msg"></div>
                             </div>
                         </div>
-                        <?php endif; ?>
-                        <input type="hidden" name="uploaded_passport" id="uploaded_passport" value="<?= $passport; ?>">
 
                         <div class="col-md-12 mb-4">
                             <label for="executive">Executive/Committee Member</label>
                             <select name="executive" id="executive">
                                 <option value=""></option>
-                                <option value="No" <?= ($executive == 'No')? "selected" : ""; ?>>No</option>
-                                <option value="Yes" <?= ($executive == 'Yes')? "selected" : ""; ?>>Yes</option>
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mb-4 position" style="display: <?= ((isset($_GET['edit']) && $executive == 'Yes') ? 'block' : 'none'); ?>">
+                        <div class="col-md-4 mb-4 position" style="display: none;">
                             <label for="position">Position</label>
                             <select name="position" id="position" class="form-control form-control-sm">
                                 <option value="">...</option>
                                 <?php foreach ($conn->query("SELECT * FROM tein_position ORDER BY position_name ASC")->fetchAll() as $row): ?>
-                                <option <?= (($position == ucwords($row['position_name'])) ? 'selected' : ''); ?>><?= ucwords($row['position_name']); ?></option>
+                                <option><?= ucwords($row['position_name']); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -452,15 +441,48 @@ require_once ("db_connection/conn.php");
                                                                     },
                                                                     callback: function(response) {
                                                                         $('#ref').val(response.reference);
-                                                                        var $this = $('#membershipForm');
+                                                                        // var $this = $('#membershipForm');
+
+                                                                        // var form_data = new FormData($this);
+                                                                        // form_data.append("passport", property);
+                                                                        // 
+                                                                        var data = new FormData();
+
+                                                                        //Form data
+                                                                        var form_data = $('#membershipForm').serializeArray();
+                                                                        $.each(form_data, function (key, input) {
+                                                                            data.append(input.name, input.value);
+                                                                        });
+
+                                                                        //File data
+                                                                        var property = document.getElementById("passport").files[0];
+                                                                        //var file_data = $('input[name="passport"]')[0].files;
+                                                                        data.append("passport", property);
+                                                                        // for (var i = 0; i < file_data.length; i++) {
+                                                                        // }
+
+                                                                        //Custom data
+                                                                        data.append('key', 'value');
+
+                                                                        // form_data.append("passport", property);
+                                                                        
                                                                         $.ajax({
                                                                             url : 'controller/add.member.verify.payment.php',
                                                                             method : 'POST',
-                                                                            data : $(this).serialize(),
-                                                                            success : function(data) {}
+                                                                            data: data,
+                                                                            contentType: false,
+                                                                            cache: false,
+                                                                            processData: false,
+                                                                            success : function(data) {
+                                                                                if (data == '') {
+                                                                                    // window.location = '<?= PROOT; ?>member.success';
+                                                                                } else {
+                                                                                    console.log(data);
+                                                                                }
+                                                                            }
                                                                         });
-                                                                        let message = 'Payment complete! Reference: ' + response.reference;
-                                                                        alert(message);
+                                                                        // let message = 'Payment complete! Reference: ' + response.reference;
+                                                                        // alert(message);
                                                                     }
                                                                 });
 

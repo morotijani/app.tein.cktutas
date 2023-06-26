@@ -19,8 +19,8 @@
                 var image_name = property.name;
 
                 var image_extension = image_name.split(".").pop().toLowerCase();
-                if (jQuery.inArray(image_extension, ['jpeg', 'png', 'jpg', 'gif']) == -1) {
-                    alert("The file extension must be .jpg, .png, .jpeg, .gif");
+                if (jQuery.inArray(image_extension, ['jpeg', 'png', 'jpg']) == -1) {
+                    alert("The file extension must be .jpg, .png, .jpeg");
                     $('#passport').val('');
                     return false;
                 }
@@ -45,7 +45,7 @@
                         },
                         success: function(data) {
                             $("#upload_file").html(data);
-                            $('#passport').css('visibility', 'hidden');
+                            // $('#passport').css('visibility', 'hidden');
                         }
                     });
                 }

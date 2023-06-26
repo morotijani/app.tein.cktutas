@@ -11,15 +11,11 @@
     <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="subscribeModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <form method="POST" action="<?= PROOT; ?>news/subscriber">
                     <div class="modal-body">
                         <p class="card-text">Subscribe to our news letter for daily update of news.</p>
                             <div class="form-floating mb-2">
-                                <input type="email" id="subscriber_email" name="subscriber_email" autocomplete="nope" class="form-control" placeholder="Email">
+                                <input type="email" id="subscriber_email" name="subscriber_email" autocomplete="nope" class="form-control" placeholder="Email" required>
                                 <label>Email</label>
                                 <div class="form-text">Your data or information are saved with us. It never be shared to any third party.</div>
                             </div>
@@ -41,7 +37,7 @@
                     <form method="GET" action="<?= PROOT; ?>news/search">
                         <div class="input-group">
                             <input type="text" class="form-control" name="q" id="q" placeholder="Enter search">
-                            <button class="btn btn-outline-secondary" type="button">Search</button>
+                            <button class="btn btn-outline-secondary">Search</button>
                         </div>
                     </form>
                 </div>

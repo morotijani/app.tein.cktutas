@@ -200,7 +200,7 @@
             &copy; <?= date('Y'); ?>
         </footer>
     </div>
-    <?php include ("includes/footer.php"); ?>
+    <?php include (".in/includes/footer.php"); ?>
     <script src="https://js.paystack.co/v1/inline.js"></script> 
     <script>
 

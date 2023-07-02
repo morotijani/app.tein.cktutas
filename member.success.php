@@ -11,14 +11,14 @@
 		$statement = $conn->prepare($query);
 		$statement->execute([$reference]);
 		if ($statement->rowCount() > 0) {
-			session_unset($_SESSION['member']);
+			$_SESSION['member'] = 'tein';
 			print_r($statement->fetchAll());
 	?>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
 <head>
-    <script src="<?= PROOT; ?>news/dist/js/color-modes.js"></script>
+    <script src="<?= PROOT; ?>assets/js/color-modes.js"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,7 +28,7 @@
     <title>Member · TEIN - CKTUTAS</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/">
-    <link href="<?= PROOT; ?>news/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="<?= PROOT; ?>assets/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -186,7 +186,7 @@
 	  	</div>
 	</div>
 
-	<script src="<?= PROOT; ?>news/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+	<script src="<?= PROOT; ?>assets/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 </html>
 	<?php

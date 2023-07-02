@@ -24,7 +24,6 @@
         $telephone = sanitize($_POST['telephone']);
         $card_type = sanitize($_POST['card_type']);
         $executive = sanitize($_POST['executive']);
-        $position = sanitize($_POST['position']);
         $paid = 1;
         $registered_date = date("Y-m-d H:i:s A");
 
@@ -46,11 +45,11 @@
 
         if (empty($message)) {
             $data = array(
-                $student_id, $reference, $fname, $lname, $email, $sex, $school, $department, $programme, $level, $yoa, $yoc, $hostel, $region, $constituency, $branch, $location, $whatsapp, $telephone, $card_type, $executive, $position, $paid, $registered_date
+                $student_id, $reference, $fname, $lname, $email, $sex, $school, $department, $programme, $level, $yoa, $yoc, $hostel, $region, $constituency, $branch, $location, $whatsapp, $telephone, $card_type, $executive, $paid, $registered_date
             );
             $query = "
-                INSERT INTO `tein_membership`(`membership_student_id`, `membership_reference_id`, `membership_fname`, `membership_lname`, `membership_email`, `membership_sex`, `membership_school`, `membership_department`, `membership_programme`, `membership_level`, `membership_yoa`, `membership_yoc`, `membership_name_of_hostel`, `membership_region`, `membership_constituency`, `membership_branch`, `membership_passport`, `membership_whatsapp_contact`, `membership_telephone_number`, `membership_card_type`, `membership_executive`, `membership_position`, `membership_paid`, `membership_registered_date`) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO `tein_membership`(`membership_student_id`, `membership_reference_id`, `membership_fname`, `membership_lname`, `membership_email`, `membership_sex`, `membership_school`, `membership_department`, `membership_programme`, `membership_level`, `membership_yoa`, `membership_yoc`, `membership_name_of_hostel`, `membership_region`, `membership_constituency`, `membership_branch`, `membership_passport`, `membership_whatsapp_contact`, `membership_telephone_number`, `membership_card_type`, `membership_executive`, `membership_paid`, `membership_registered_date`) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ";
             $statement = $conn->prepare($query);
             $result = $statement->execute($data);

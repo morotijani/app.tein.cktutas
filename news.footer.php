@@ -34,7 +34,7 @@
         <div class='modal-dialog modal-dialog-centered'>
             <div class='modal-content'>
                 <div class='modal-body'>
-                    <form method="GET" action="<?= PROOT; ?>news/search">
+                    <form method="GET" action="<?= PROOT; ?>search">
                         <div class="input-group">
                             <input type="text" class="form-control" name="q" id="q" placeholder="Enter search">
                             <button class="btn btn-outline-secondary">Search</button>

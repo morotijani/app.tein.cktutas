@@ -43,6 +43,9 @@
                                 <div class="form-text text-danger email_msg"></div>
                             </div>
                         </div>
+                        <div class="col level d-none">
+                            <input class="form-control member_level" type="text" value="Disabled readonly input" disabled readonly>
+                        </div>
 
                         <div class="mt-2 mb-2">
                             <input type="hidden" id="ref" name="ref">
@@ -108,101 +111,27 @@
             e.preventDefault();
             
             var  student_id = $('#student_id').val()
-            var  fname = $('#fname').val()
-            var  lname = $('#lname').val()
             var  email = $('#email').val()
-            var  sex = $('#sex').val()
-            var  school = $('#school').val()
-            var  department = $('#department').val()
-            var  programme = $('#programme').val()
-            var  yoa = $('#yoa').val()
-            var  region = $('#region').val()
-            var  telephone = $('#telephone').val()
-            var  card_type = $('#card_type').val()
-            var  passport = $('#passport').val()
 
             if (student_id == '') {
                 $('#student_id').focus();
                 $('.student_msg').html('Student id is required!');
                 return false;
             } else {
-                
                 $('.student_msg').html('');
-                if (fname == '') {
-                    $('#fname').focus();
-                    $('.fname_msg').html('First name required!');
+                $('.fname_msg').html('');
+                $('.lname_msg').html('');
+                if (email == '') {
+                    $('#email').focus();
+                    $('.email_msg').html('Email required!');
                     return false;
                 } else {
-                    $('.student_msg').html('');
-                    $('.fname_msg').html('');
-                    if (lname == '') {
-                        $('#lname').focus();
-                        $('.lname_msg').html('Last name required!');
-                        return false;
-                    } else {
-                        $('.student_msg').html('');
-                        $('.fname_msg').html('');
-                        $('.lname_msg').html('');
-                        if (email == '') {
-                            $('#email').focus();
-                            $('.email_msg').html('Email required!');
-                            return false;
-                        } else {
                        
                             $('.student_msg').html('');
                             $('.fname_msg').html('');
                             $('.lname_msg').html('');
                             $('.email_msg').html('');
-                            if (sex == '') {
-                                $('#sex').focus();
-                                $('.sex_msg').html('Sex is required!');
-                                return false;
-                            } else {
-                                $('.student_msg').html('');
-                                $('.fname_msg').html('');
-                                $('.lname_msg').html('');
-                                $('.email_msg').html('');
-                                $('.sex_msg').html('');
-                                if (school == '') {
-                                    $('#school').focus();
-                                    $('.school_msg').html('School is required!');
-                                    return false;
-                                } else {
-                                    $('.student_msg').html('');
-                                    $('.fname_msg').html('');
-                                    $('.lname_msg').html('');
-                                    $('.email_msg').html('');
-                                    $('.sex_msg').html('');
-                                    $('.school_msg').html('');
-                                    if (department == '') {
-                                        $('#department').focus();
-                                        $('.department_msg').html('Department is required!');
-                                        return false;
-                                    } else {
-                                        $('.student_msg').html('');
-                                        $('.fname_msg').html('');
-                                        $('.lname_msg').html('');
-                                        $('.email_msg').html('');
-                                        $('.sex_msg').html('');
-                                        $('.school_msg').html('');
-                                        $('.department_msg').html('');
-                                        if (programme == '') {
-                                            $('#programme').focus();
-                                            $('.programme_msg').html('Programme is required!');
-                                            return false;
-                                        } else {
-                                            $('.student_msg').html('');
-                                            $('.fname_msg').html('');
-                                            $('.lname_msg').html('');
-                                            $('.email_msg').html('');
-                                            $('.sex_msg').html('');
-                                            $('.school_msg').html('');
-                                            $('.department_msg').html('');
-                                            $('.programme_msg').html('');
-                                            if (yoa == '') {
-                                                $('#yoa').focus();
-                                                $('.yoa_msg').html('Year of admission required!');
-                                                return false;
+                           
                                             } else {
                                                 $('.student_msg').html('');
                                                 $('.fname_msg').html('');
@@ -213,169 +142,97 @@
                                                 $('.department_msg').html('');
                                                 $('.programme_msg').html('');
                                                 $('.yoa_msg').html('');
-                                                if (region == '') {
-                                                    $('#region').focus();
-                                                    $('.region_msg').html('Region is required!');
-                                                    return false;
-                                                } else {
-                                                    $('.student_msg').html('');
-                                                    $('.fname_msg').html('');
-                                                    $('.lname_msg').html('');
-                                                    $('.email_msg').html('');
-                                                    $('.sex_msg').html('');
-                                                    $('.school_msg').html('');
-                                                    $('.department_msg').html('');
-                                                    $('.programme_msg').html('');
-                                                    $('.yoa_msg').html('');
-                                                    $('.region_msg').html('');
-                                                    if (telephone == '') {
-                                                        $('#telephone').focus();
-                                                        $('.telephone_msg').html('Telephone number is required!');
-                                                        return false;
-                                                    } else {
-                                                        $('.student_msg').html('');
-                                                        $('.fname_msg').html('');
-                                                        $('.lname_msg').html('');
-                                                        $('.email_msg').html('');
-                                                        $('.sex_msg').html('');
-                                                        $('.school_msg').html('');
-                                                        $('.department_msg').html('');
-                                                        $('.programme_msg').html('');
-                                                        $('.yoa_msg').html('');
-                                                        $('.region_msg').html('');
-                                                        $('.telephone_msg').html('');
-                                                        if (card_type == '') {
-                                                            $('#card_type').focus();
-                                                            $('.card_type_msg').html('Card Type required!');
-                                                            return false;
-                                                        } else {
-                                                            $('.student_msg').html('');
-                                                            $('.fname_msg').html('');
-                                                            $('.lname_msg').html('');
-                                                            $('.email_msg').html('');
-                                                            $('.sex_msg').html('');
-                                                            $('.school_msg').html('');
-                                                            $('.department_msg').html('');
-                                                            $('.programme_msg').html('');
-                                                            $('.yoa_msg').html('');
-                                                            $('.region_msg').html('');
-                                                            $('.telephone_msg').html('');
-                                                            $('.card_type_msg').html('');
-                                                            if (passport == '') {
-                                                                $('#passport').focus();
-                                                                $('.passport_msg').html('Passport size photo is required!');
-                                                                return false;
-                                                            } else {
-                                                                $('.student_msg').html('');
-                                                                $('.fname_msg').html('');
-                                                                $('.lname_msg').html('');
-                                                                $('.email_msg').html('');
-                                                                $('.sex_msg').html('');
-                                                                $('.school_msg').html('');
-                                                                $('.department_msg').html('');
-                                                                $('.programme_msg').html('');
-                                                                $('.yoa_msg').html('');
-                                                                $('.region_msg').html('');
-                                                                $('.telephone_msg').html('');
-                                                                $('.card_type_msg').html('');
-                                                                $('.passport_msg').html('');
+                                                $('.region_msg').html('');
+                                                $('.telephone_msg').html('');
+                                                $('.card_type_msg').html('');
+                                                $('.passport_msg').html('');
 
-                                                                let handler = PaystackPop.setup({
-                                                                    key: '<?php echo PAYSTACK_PUBLIC_KEY; ?>', // Replace with your public key
-                                                                    email: document.getElementById("email").value,
-                                                                    // amount: document.getElementById("amount").value * 100,
-                                                                    amount: 20 * 100,
-                                                                    ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-                                                                    // label: "Optional string that replaces customer email"
-                                                                    currency: 'GHS',
-                                                                    channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'], 
-                                                                    onClose: function() {
-                                                                      alert('Window closed.');
-                                                                    },
-                                                                    callback: function(response) {
-                                                                        $('#ref').val(response.reference);
+                                                let handler = PaystackPop.setup({
+                                                    key: '<?php echo PAYSTACK_PUBLIC_KEY; ?>', // Replace with your public key
+                                                    email: document.getElementById("email").value,
+                                                    // amount: document.getElementById("amount").value * 100,
+                                                    amount: 20 * 100,
+                                                    ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                                                    // label: "Optional string that replaces customer email"
+                                                    currency: 'GHS',
+                                                    channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'], 
+                                                    onClose: function() {
+                                                      alert('Window closed.');
+                                                    },
+                                                    callback: function(response) {
+                                                        $('#ref').val(response.reference);
 
-                                                                        var data = new FormData();
+                                                        var data = new FormData();
 
-                                                                        // Form data
-                                                                        var form_data = $('#membershipForm').serializeArray();
-                                                                        $.each(form_data, function (key, input) {
-                                                                            data.append(input.name, input.value);
-                                                                        });
+                                                        // Form data
+                                                        var form_data = $('#membershipForm').serializeArray();
+                                                        $.each(form_data, function (key, input) {
+                                                            data.append(input.name, input.value);
+                                                        });
 
-                                                                        // File data
-                                                                        var property = document.getElementById("passport").files[0];
-                                                                        data.append("passport", property);
+                                                        // File data
+                                                        var property = document.getElementById("passport").files[0];
+                                                        data.append("passport", property);
 
-                                                                        // Custom data
-                                                                        data.append('key', 'value');                                                                        
-                                                                        $.ajax({
-                                                                            url : 'controller/add.member.verify.payment.php',
-                                                                            method : 'POST',
-                                                                            data: data,
-                                                                            contentType: false,
-                                                                            cache: false,
-                                                                            processData: false,
-                                                                            success : function(data) {
-                                                                                if (data == '') {
-                                                                                    window.location = '<?= PROOT; ?>member.success';
-                                                                                } else {
-                                                                                    console.log(data);
-                                                                                }
-                                                                            }
-                                                                        });
-                                                                        // let message = 'Payment complete! Reference: ' + response.reference;
-                                                                        // alert(message);
-                                                                    }
-                                                                });
-
-                                                                $.ajax ({
-                                                                    url: '<?= PROOT; ?>controller/check.exist.php',
-                                                                    method : 'POST',
-                                                                    data: {studentId : student_id},
-                                                                    success : function(data) {
-                                                                        if (data == '') {
-
-                                                                            $('.student_msg').html();
-
-                                                                            $.ajax ({
-                                                                                url: '<?= PROOT; ?>controller/check.exist.php',
-                                                                                method : 'POST',
-                                                                                data: {email : email},
-                                                                                success : function(data) {
-                                                                                    if (data == '') {
-                                                                                        $('.email_msg').html();
-
-                                                                                        handler.openIframe();
-
-                                                                                    } else {
-                                                                                        $('.email_msg').html(data);
-                                                                                        $('#email').focus()
-                                                                                        return false;
-                                                                                    }
-                                                                                }
-                                                                            })
-                                                                        } else {
-                                                                            $('.student_msg').html(data);
-                                                                            $('#student_id').focus()
-                                                                            return false;
-                                                                        }
-                                                                    }
-                                                                })
+                                                        // Custom data
+                                                        data.append('key', 'value');                                                                        
+                                                        $.ajax({
+                                                            url : 'controller/add.member.verify.payment.php',
+                                                            method : 'POST',
+                                                            data: data,
+                                                            contentType: false,
+                                                            cache: false,
+                                                            processData: false,
+                                                            success : function(data) {
+                                                                if (data == '') {
+                                                                    window.location = '<?= PROOT; ?>member.success';
+                                                                } else {
+                                                                    console.log(data);
+                                                                }
                                                             }
+                                                        });
+                                                        // let message = 'Payment complete! Reference: ' + response.reference;
+                                                        // alert(message);
+                                                    }
+                                                });
+
+                                                $.ajax ({
+                                                    url: '<?= PROOT; ?>controller/check.exist.php',
+                                                    method : 'POST',
+                                                    data: {studentId : student_id},
+                                                    success : function(data) {
+                                                        if (data == '') {
+
+                                                            $('.student_msg').html();
+
+                                                            $.ajax ({
+                                                                url: '<?= PROOT; ?>controller/check.exist.php',
+                                                                method : 'POST',
+                                                                data: {email : email},
+                                                                success : function(data) {
+                                                                    if (data == '') {
+                                                                        $('.email_msg').html();
+
+                                                                        handler.openIframe();
+
+                                                                    } else {
+                                                                        $('.email_msg').html(data);
+                                                                        $('#email').focus()
+                                                                        return false;
+                                                                    }
+                                                                }
+                                                            })
+                                                        } else {
+                                                            $('.student_msg').html(data);
+                                                            $('#student_id').focus()
+                                                            return false;
                                                         }
                                                     }
-                                                }
+                                                })
                                             }
                                         }
                                     }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+                       
     </script>
 
 </body>

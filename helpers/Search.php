@@ -45,7 +45,7 @@
 						          	<h3 class="mb-0">' . $row["news_title"] . '</h3>
 						          	<div class="mb-1 text-body-secondary">' . pretty_month_and_day($row["ca"]) . '</div>
 						          	<p class="mb-auto">' . substr($row['news_content'], 0, 90) . ' ...</p>
-						          	<a href="' . PROOT . 'news/view/' . $row["news_url"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
+						          	<a href="' . PROOT . 'view/' . $row["news_url"] . '" class="icon-link gap-1 icon-link-hover stretched-link">
 						            	Continue reading
 						            	<svg class="bi"><use xlink:href="#chevron-right"/></svg>
 						          	</a>

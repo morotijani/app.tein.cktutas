@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Get membership card . TEIN</title>
+    <title>Pay Membership Dues . TEIN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <body>
@@ -22,38 +22,40 @@
                 </div>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h1 class="display-5 fw-bold">Pay your dues</h1>
+                        <h1 class="display-5 fw-bold">Pay membership dues</h1>
                         <p class="small text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis beatae pariatur ad voluptatum cum voluptates molestiae consequuntur sunt debitis voluptas omnis ipsam quod harum quos, nesciunt, tempora tempore sapiente ducimus.</p>
+                        <a href="<?= PROOT; ?>" class="text-secondary"><< go back.</a>
                     </div>
                 </div>
 
-                 <form id="membershipForm" enctype="multipart/form-data" method="POST">
+                 <form id="membershipForm" method="POST">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-12" id="first">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="student_id" id="student_id" placeholder="Student Id">
-                                <label for="student_id">Student Id</label>
-                                <div class="form-text text-danger student_msg"></div>
+                                <input type="text" class="form-control" name="member_id" id="member_id" placeholder="Membersip Id">
+                                <label for="member_id">Membership Id</label>
+                                <div class="form-text text-danger membership_msg"></div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="email" id="email" placeholder="Email">
-                                <label for="email">Email</label>
-                                <div class="form-text text-danger email_msg"></div>
-                            </div>
-                        </div>
-                        <div class="col level d-none">
-                            <input class="form-control member_level" type="text" value="Disabled readonly input" disabled readonly>
                         </div>
 
-                        <div class="mt-2 mb-2">
-                            <input type="hidden" id="ref" name="ref">
-                            <button onclick="payWithPaystack()" class="btn btn-outline-success" name="submit" id="submit">Pay dues</button>
-                            <br>
-                            <br>
-                            <a href="<?= PROOT; ?>" class="text-secondary"><< go back.</a>
+                        <div class="mt-2 mb-2" id="next-button">
+                            <button class="btn btn-dark" type="button" id="next-1">Next >></button>
                         </div>
+
+                        <span id="second" class="d-none">
+                            <div class="col mb-2">
+                                <input class="form-control form-control-lg member_level" id="level" type="text" disabled readonly>
+                            </div>
+
+                            <div class="mt-2 mb-2">
+                                <input type="hidden" id="ref" name="ref">
+                                <input type="hidden" id="mID" name="mID">
+                                <input type="hidden" id="email" name="email">
+                                <button onclick="payWithPaystack()" class="btn btn-outline-success" name="submit" id="submit">Pay dues</button>
+                                <br>
+                                <div class="form-text"><a href="javascript:;" id="prev-1"><< Back</a></div>
+                            </div>
+                        </span>
                     </div>
                 </form>
 
@@ -61,44 +63,80 @@
         </div>
     </div>
     <?php include (".in/includes/footer.php"); ?>
-    <script src="https://js.paystack.co/v1/inline.js"></script> 
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <script>
-
-        $('#email').on('keyup', function(e) {
-            e.preventDefault();
-            var  email = $('#email').val()
-
-            $.ajax ({
-                url: '<?= PROOT; ?>controller/check.exist.php',
-                method : 'POST',
-                data: {email : email},
-                success : function(data) {
-                    if (data == '') {
-                        $('.email_msg').html();
-                        return true
-                    } else {
-                        $('.email_msg').html(data);
-                        return false;
-                    }
-                }
-            })
-        })
         
-        $('#student_id').on('keyup', function(e) {
+        $('#next-1').click(function(e) {
             e.preventDefault();
-            var  studentId = $('#student_id').val()
+            $('.membership_msg').html('');
+
+            if ($("#member_id").val() == '') {
+                $('.membership_msg').html('* Membership id needed!');
+                $("#member_id").focus()
+                $('#level').val('');
+                return false;
+            } else {
+                var  member_id = $('#member_id').val()
+
+                $.ajax ({
+                    url: '<?= PROOT; ?>controller/check.exist.php',
+                    method : 'POST',
+                    data: {member_id : member_id},
+                    success : function(data) {
+                        if (data == '') {
+                            $('.membership_msg').html('Membership Id do not exist, you can claim a membership id <a href="<?= PROOT; ?>get-membership-card">here</a>');
+                            $("#member_id").attr('readonly', false);
+                            return false
+                        } else {
+                            const response = JSON.parse(data);
+
+                            $('#mID').val(response["mid"]);
+                            $('#email').val(response["email"]);
+                            $('#level').val(response["level"]);
+
+                            $('.membership_msg').html('');
+                            $('#second').removeClass('d-none');
+                            $("#member_id").attr('readonly', true);
+                            $('#next-button').addClass('d-none');
+                            return true;
+                        }
+                    }
+                })
+            }
+        })
+
+        $("#prev-1").click(function() {
+            $('#second').addClass('d-none')
+            $('#next-button').removeClass('d-none')
+            $("#member_id").attr('readonly', false);
+            $('#first').removeClass('d-none')
+            $('#level').val('');
+        })
+
+        $('#member_id').on('keyup', function(e) {
+            e.preventDefault();
+            var  member_id = $('#member_id').val()
 
             $.ajax ({
                 url: '<?= PROOT; ?>controller/check.exist.php',
                 method : 'POST',
-                data: {studentId : studentId},
+                data: {member_id : member_id},
                 success : function(data) {
-                    if (data == '') {
-                        $('.student_msg').html();
-                        return true
+                    const response = JSON.parse(data);
+                    // console.log(Object.keys(data).length);
+                    // if (Object.keys(data).length < 0) {
+                    if (response["msg"] == '') {
+                        console.log('empty');
+                        $('.membership_msg').html('Membership Id do not exist, you can claim a membership ID <a href="<?= PROOT; ?>get-membership-card">here</a>');
+                        return false
                     } else {
-                        $('.student_msg').html(data);
-                        return false;
+                        console.log('');
+                        $('#mID').val(response["mid"]);
+                        $('#email').val(response["email"]);
+                        $('#level').val(response["level"]);
+
+                        $('.membership_msg').html('');
+                        return true;
                     }
                 }
             })
@@ -110,129 +148,72 @@
         function payWithPaystack(e) {
             e.preventDefault();
             
-            var  student_id = $('#student_id').val()
-            var  email = $('#email').val()
+            var  member_id = $('#member_id').val()
 
-            if (student_id == '') {
-                $('#student_id').focus();
-                $('.student_msg').html('Student id is required!');
+            if (member_id == '') {
+                $('#member_id').focus();
+                $('.membership_msg').html('Student ID is required!');
                 return false;
             } else {
-                $('.student_msg').html('');
-                $('.fname_msg').html('');
-                $('.lname_msg').html('');
-                if (email == '') {
-                    $('#email').focus();
-                    $('.email_msg').html('Email required!');
-                    return false;
-                } else {
-                       
-                            $('.student_msg').html('');
-                            $('.fname_msg').html('');
-                            $('.lname_msg').html('');
-                            $('.email_msg').html('');
-                           
-                                            } else {
-                                                $('.student_msg').html('');
-                                                $('.fname_msg').html('');
-                                                $('.lname_msg').html('');
-                                                $('.email_msg').html('');
-                                                $('.sex_msg').html('');
-                                                $('.school_msg').html('');
-                                                $('.department_msg').html('');
-                                                $('.programme_msg').html('');
-                                                $('.yoa_msg').html('');
-                                                $('.region_msg').html('');
-                                                $('.telephone_msg').html('');
-                                                $('.card_type_msg').html('');
-                                                $('.passport_msg').html('');
+                $('.membership_msg').html('');
+                let handler = PaystackPop.setup({
+                    key: '<?php echo PAYSTACK_PUBLIC_KEY; ?>', // Replace with your public key
+                    email: document.getElementById("email").value,
+                    // amount: document.getElementById("amount").value * 100,
+                    amount: 20 * 100,
+                    ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                    // label: "Optional string that replaces customer email"
+                    currency: 'GHS',
+                    channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'], 
+                    onClose: function() {
+                        alert('Window closed.');
+                    },
+                    callback: function(response) {
+                        $('#ref').val(response.reference);
 
-                                                let handler = PaystackPop.setup({
-                                                    key: '<?php echo PAYSTACK_PUBLIC_KEY; ?>', // Replace with your public key
-                                                    email: document.getElementById("email").value,
-                                                    // amount: document.getElementById("amount").value * 100,
-                                                    amount: 20 * 100,
-                                                    ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-                                                    // label: "Optional string that replaces customer email"
-                                                    currency: 'GHS',
-                                                    channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'], 
-                                                    onClose: function() {
-                                                      alert('Window closed.');
-                                                    },
-                                                    callback: function(response) {
-                                                        $('#ref').val(response.reference);
+                        var reference = $('#ref').val();
+                        var id = $('#mID').val();
+                        var level = $('#level').val();
+                        $.ajax ({
+                            url: '<?= PROOT; ?>controller/dues.payment.php',
+                            method : 'POST',
+                            data: {
+                                id : id, 
+                                level : level, 
+                                reference : reference
+                            },
+                            success : function(data) {
+                                if (data == '') {
+                                    window.location = '<?= PROOT; ?>dues.paid';
+                                }
+                            }
+                        })
+                    }
+                })
 
-                                                        var data = new FormData();
+                var  member_id = $('#member_id').val()
+                $.ajax ({
+                    url: '<?= PROOT; ?>controller/check.exist.php',
+                    method : 'POST',
+                    data: {member_id : member_id},
+                    success : function(data) {
+                        if (data == '') {
+                            $('.membership_msg').html('Membership Id do not exist, you can claim a membership ID <a href="<?= PROOT; ?>get-membership-card">here</a>');
+                            return false
+                        } else {
+                            const response = JSON.parse(data);
+                            $('#mID').val(response["mid"]);
+                            $('#email').val(response["email"]);
+                            $('#level').val(response["level"]);
 
-                                                        // Form data
-                                                        var form_data = $('#membershipForm').serializeArray();
-                                                        $.each(form_data, function (key, input) {
-                                                            data.append(input.name, input.value);
-                                                        });
+                            $('.membership_msg').html('');
 
-                                                        // File data
-                                                        var property = document.getElementById("passport").files[0];
-                                                        data.append("passport", property);
-
-                                                        // Custom data
-                                                        data.append('key', 'value');                                                                        
-                                                        $.ajax({
-                                                            url : 'controller/add.member.verify.payment.php',
-                                                            method : 'POST',
-                                                            data: data,
-                                                            contentType: false,
-                                                            cache: false,
-                                                            processData: false,
-                                                            success : function(data) {
-                                                                if (data == '') {
-                                                                    window.location = '<?= PROOT; ?>member.success';
-                                                                } else {
-                                                                    console.log(data);
-                                                                }
-                                                            }
-                                                        });
-                                                        // let message = 'Payment complete! Reference: ' + response.reference;
-                                                        // alert(message);
-                                                    }
-                                                });
-
-                                                $.ajax ({
-                                                    url: '<?= PROOT; ?>controller/check.exist.php',
-                                                    method : 'POST',
-                                                    data: {studentId : student_id},
-                                                    success : function(data) {
-                                                        if (data == '') {
-
-                                                            $('.student_msg').html();
-
-                                                            $.ajax ({
-                                                                url: '<?= PROOT; ?>controller/check.exist.php',
-                                                                method : 'POST',
-                                                                data: {email : email},
-                                                                success : function(data) {
-                                                                    if (data == '') {
-                                                                        $('.email_msg').html();
-
-                                                                        handler.openIframe();
-
-                                                                    } else {
-                                                                        $('.email_msg').html(data);
-                                                                        $('#email').focus()
-                                                                        return false;
-                                                                    }
-                                                                }
-                                                            })
-                                                        } else {
-                                                            $('.student_msg').html(data);
-                                                            $('#student_id').focus()
-                                                            return false;
-                                                        }
-                                                    }
-                                                })
-                                            }
-                                        }
-                                    }
-                       
+                            handler.openIframe();
+                        }
+                    }
+                })
+            }
+        }               
     </script>
 
 </body>

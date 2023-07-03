@@ -33,6 +33,69 @@
 	        	echo '';
 	        }
 	    }
+	
+		if (isset($_POST['member_id'])) {
+			$member_id = sanitize($_POST['member_id']);
+
+	        $level = '';
+	        $email = '';
+	        $cout = [];
+
+			$query = "
+	            SELECT *, tein_membership.id AS tein_membership_id FROM tein_membership 
+	            INNER JOIN tein_dues 
+	            ON tein_dues.member_id = tein_membership.id
+	            WHERE tein_membership.membership_identity = ? 
+	            LIMIT 1
+	        ";
+	        $statement = $conn->prepare($query);
+	        $statement->execute([$member_id]);
+	        $row = $statement->fetchAll();
+	        $row_count = $statement->rowCount();
+
+	       if ($row_count > 0) {
+	            $member_id = $row[0]['tein_membership_id'];
+	            $level = $row[0]['membership_level'];
+	            $email = $row[0]['membership_email'];
+
+	            if ($level == 'L100') {
+	            	if ($row[0]['level_100'] == 1) {
+	            		$lvl = 'L200';
+	            	} else if ($row[0]['level_200'] == 1) {
+	            		$lvl = 'L300';
+	            	} else if ($row[0]['level_300'] == 1) {
+	            		$lvl = 'L400';
+	            	} else {
+	            		$lvl = 'L100';
+	            	}
+	            } elseif ($level == 'L200') {
+	            	if ($row[0]['level_200'] == 1) {
+	            		$lvl = 'L300';
+	            	} else if ($row[0]['level_300'] == 1) {
+	            		$lvl = 'L400';
+	            	} else {
+	            		$lvl = 'L200';
+	            	}
+	            } elseif ($level == 'L300') {
+	            	if ($row[0]['level_300'] == 1) {
+	            		$lvl = 'L400';
+	            	} else {
+	            		$lvl = 'L300';
+	            	}
+	            } else {
+	            	$lvl = 'L100';
+	            }
+		        $cout['msg'] = '200';
+		        $cout['mid'] = $member_id;
+		        $cout['email'] = $email;
+		        $cout['level'] = $lvl;
+	        	
+	       } else {
+		    	$cout['msg'] = '';
+	      	}
+	        $cout = json_encode($cout);
+	        echo $cout;
+		}
 	}
 
 

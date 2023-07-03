@@ -57,7 +57,30 @@
             $inserted_id = $conn->lastInsertId();
             $identity = $membership->generate_identity_number($inserted_id);
             if (isset($result)) {
+                
                 $conn->query("UPDATE tein_membership SET membership_identity = '" . $identity . "' WHERE id = $inserted_id")->execute();
+
+                if ($level == 'L100') {
+                    $sql = "
+                        INSERT INTO `tein_dues`(`member_id`, `level_100`) 
+                    ";
+                } elseif ($level == 'L200') {
+                    $sql = "
+                        INSERT INTO `tein_dues`(`member_id`, `level_200`) 
+                    ";
+                } elseif ($level == 'L300') {
+                    $sql = "
+                        INSERT INTO `tein_dues`(`member_id`, `level_300`) 
+                    ";
+                } elseif ($level == 'L400') {
+                    $sql = "
+                        INSERT INTO `tein_dues`(`member_id`, `level_400`) 
+                    ";
+                }
+                $sql .= "VALUES (?, ?)";
+                $statement = $conn->prepare($sql);
+                $statement->execute([$inserted_id, 1]);
+
                 $_SESSION['member'] = $reference;
                 echo '';
             } else {

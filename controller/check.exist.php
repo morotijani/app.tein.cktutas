@@ -58,6 +58,7 @@
 	            $level = $row[0]['membership_level'];
 	            $email = $row[0]['membership_email'];
 
+		        $cout['msg'] = '200';
 	            if ($level == 'L100') {
 	            	if ($row[0]['level_100'] != null) {
 	            		$lvl = 'L200';
@@ -85,10 +86,9 @@
 	            }
 
 	            if ($row[0]['level_400'] != null) {
-	            	$lvl = 'done';
+	            	$cout['msg'] = 'done';
 	            }
 
-		        $cout['msg'] = '200';
 		        $cout['mid'] = $member_id;
 		        $cout['email'] = $email;
 		        $cout['level'] = $lvl;

@@ -24,7 +24,7 @@
                     <div class="card-body">
                         <h1 class="display-5 fw-bold">Pay membership dues</h1>
                         <p class="small text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis beatae pariatur ad voluptatum cum voluptates molestiae consequuntur sunt debitis voluptas omnis ipsam quod harum quos, nesciunt, tempora tempore sapiente ducimus.</p>
-                        <a href="<?= PROOT; ?>" class="text-secondary"><< go back.</a>
+                        <a href="<?= PROOT; ?>" class="text-secondary">^ go home.</a>
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@
                             $("#member_id").attr('readonly', false);
                             return false
                         } else {
-                            if (response["level"] == 'done') {
+                            if (response["msg"] == 'done') {
                                 $('#level').val('All dues paid');
                                 $('#level').addClass('text-success fw-bolder');
                                 
@@ -99,6 +99,9 @@
                                 $('#mID').val(response["mid"]);
                                 $('#email').val(response["email"]);
                                 $('#level').val(response["level"]);
+
+                                $('#submit').attr('disabled', false)
+                                $('#submit').removeClass('d-none')
                             }
 
                             $('.membership_msg').html('');
@@ -134,7 +137,7 @@
                         $('.membership_msg').html('Membership Id do not exist, you can claim a membership ID <a href="<?= PROOT; ?>get-membership-card">here</a>');
                         return false
                     } else {
-                        if (response["level"] == 'done') {
+                        if (response["msg"] == 'done') {
                             $('#level').val('All dues paid');
                             $('#level').addClass('text-success fw-bolder');
                             
@@ -144,6 +147,9 @@
                             $('#mID').val(response["mid"]);
                             $('#email').val(response["email"]);
                             $('#level').val(response["level"]);
+
+                            $('#submit').attr('disabled', false)
+                            $('#submit').removeClass('d-none')
                         }
 
                         $('.membership_msg').html('');
@@ -213,7 +219,7 @@
                             $('.membership_msg').html('Membership Id do not exist, you can claim a membership ID <a href="<?= PROOT; ?>get-membership-card">here</a>');
                             return false
                         } else {
-                            if (response["level"] == 'done') {
+                            if (response["msg"] == 'done') {
                                 $('#level').val('All dues paid');
                                 $('#level').addClass('text-success fw-bolder');
                                 
@@ -223,6 +229,9 @@
                                 $('#mID').val(response["mid"]);
                                 $('#email').val(response["email"]);
                                 $('#level').val(response["level"]);
+
+                                $('#submit').attr('disabled', false)
+                                $('#submit').removeClass('d-none')
                             }
 
                             $('.membership_msg').html('');

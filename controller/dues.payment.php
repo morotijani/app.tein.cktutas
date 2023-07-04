@@ -8,25 +8,27 @@
 		$level = sanitize($_POST['level']);
 
 		if (!empty($reference) || $reference != '') {
+            $sql = 'UPDATE `tein_dues` SET ';
 			if ($level == 'L100') {
-                $sql = "
-                    UPDATE `tein_dues` SET `member_id` = ?, `level_100` = ? 
+                $sql .= "
+                    `level_100` = ? 
                 ";
             } elseif ($level == 'L200') {
-                $sql = "
-                    UPDATE `tein_dues` SET `member_id` = ?, `level_200` = ? 
+                $sql .= "
+                    `level_200` = ? 
                 ";
             } elseif ($level == 'L300') {
-                $sql = "
-                    UPDATE `tein_dues` SET `member_id` = ?, `level_300` = ? 
+                $sql .= "
+                    `level_300` = ? 
                 ";
             } elseif ($level == 'L400') {
-                $sql = "
-                    UPDATE `tein_dues` SET `member_id` = ?, `level_400` = ? 
+                $sql .= "
+                    `level_400` = ? 
                 ";
             }
+            $sql .= 'WHERE `member_id` = ?';
             $statement = $conn->prepare($sql);
-            $result = $statement->execute([$id, $reference]);
+            $result = $statement->execute([$reference, $id]);
             if (isset($result)) {
             	$_SESSION['member.paid'] = $reference;
             	echo '';

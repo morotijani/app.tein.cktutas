@@ -79,7 +79,7 @@
                 }
                 $sql .= "VALUES (?, ?)";
                 $statement = $conn->prepare($sql);
-                $statement->execute([$inserted_id, 1]);
+                $statement->execute([$inserted_id, $reference]);
 
                 $_SESSION['member'] = $reference;
                 echo '';

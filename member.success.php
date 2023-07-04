@@ -178,7 +178,7 @@
 	    	<img class="img-fluid" src="<?= PROOT; ?>dist/media/logo/logo.png" width="100" height="100">
 	    	<h1 class="text-body-emphasis">Placeholder jumbotron</h1>
 	    	<p class="col-lg-6 mx-auto mb-4">
-	      		This faded back jumbotron is useful for placeholder content. It's also a great way to add a bit of context to a page or section when no content is available and to encourage visitors to take a specific action.
+	      		Member registered faded back jumbotron is useful for placeholder content. It's also a great way to add a bit of context to a page or section when no content is available and to encourage visitors to take a specific action.
 	    	</p>
 	    	<button class="btn btn-primary px-5 mb-5" type="button">
 	      		Take shot.

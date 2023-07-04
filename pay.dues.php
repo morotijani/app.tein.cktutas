@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-12" id="first">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" name="member_id" id="member_id" placeholder="Membersip Id">
+                                <input type="text" class="form-control" name="member_id" id="member_id" placeholder="Membership Id">
                                 <label for="member_id">Membership Id</label>
                                 <div class="form-text text-danger membership_msg"></div>
                             </div>
@@ -83,21 +83,29 @@
                     method : 'POST',
                     data: {member_id : member_id},
                     success : function(data) {
-                        if (data == '') {
+                        const response = JSON.parse(data);
+                        if (response["msg"] == '') {
                             $('.membership_msg').html('Membership Id do not exist, you can claim a membership id <a href="<?= PROOT; ?>get-membership-card">here</a>');
                             $("#member_id").attr('readonly', false);
                             return false
                         } else {
-                            const response = JSON.parse(data);
-
-                            $('#mID').val(response["mid"]);
-                            $('#email').val(response["email"]);
-                            $('#level').val(response["level"]);
-
+                            if (response["level"] == 'done') {
+                                $('#level').val('All dues paid');
+                                $('#level').addClass('text-success fw-bolder');
+                                
+                                $('#submit').attr('disabled', true)
+                                $('#submit').addClass('d-none')
+                            } else {
+                                $('#mID').val(response["mid"]);
+                                $('#email').val(response["email"]);
+                                $('#level').val(response["level"]);
+                                
+                            }
                             $('.membership_msg').html('');
                             $('#second').removeClass('d-none');
                             $("#member_id").attr('readonly', true);
                             $('#next-button').addClass('d-none');
+
                             return true;
                         }
                     }
@@ -116,21 +124,16 @@
         $('#member_id').on('keyup', function(e) {
             e.preventDefault();
             var  member_id = $('#member_id').val()
-
             $.ajax ({
                 url: '<?= PROOT; ?>controller/check.exist.php',
                 method : 'POST',
                 data: {member_id : member_id},
                 success : function(data) {
                     const response = JSON.parse(data);
-                    // console.log(Object.keys(data).length);
-                    // if (Object.keys(data).length < 0) {
                     if (response["msg"] == '') {
-                        console.log('empty');
                         $('.membership_msg').html('Membership Id do not exist, you can claim a membership ID <a href="<?= PROOT; ?>get-membership-card">here</a>');
                         return false
                     } else {
-                        console.log('');
                         $('#mID').val(response["mid"]);
                         $('#email').val(response["email"]);
                         $('#level').val(response["level"]);
@@ -184,7 +187,7 @@
                             },
                             success : function(data) {
                                 if (data == '') {
-                                    window.location = '<?= PROOT; ?>dues.paid';
+                                    window.location = '<?= PROOT; ?>dues.paid/' + level;
                                 }
                             }
                         })
@@ -197,11 +200,11 @@
                     method : 'POST',
                     data: {member_id : member_id},
                     success : function(data) {
-                        if (data == '') {
+                        const response = JSON.parse(data);
+                        if (response["msg"] == '') {
                             $('.membership_msg').html('Membership Id do not exist, you can claim a membership ID <a href="<?= PROOT; ?>get-membership-card">here</a>');
                             return false
                         } else {
-                            const response = JSON.parse(data);
                             $('#mID').val(response["mid"]);
                             $('#email').val(response["email"]);
                             $('#level').val(response["level"]);

@@ -14,6 +14,8 @@ RewriteRule ^category/([a-zA-Z-0-9-]+)/ category.php?url=$1 [NC,L]
 RewriteRule ^search/([a-zA-Z0-9-/]+)$ search.php?q=$1 [NC,L]
 RewriteRule ^search/([a-zA-Z-0-9-]+)/ search.php?q=$1 [NC,L]
 
+RewriteRule ^dues.paid/([0-9a-zA-Z]+)$ dues.paid.php?level=$1 [NC,L]
+
 RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteCond %{REQUEST_FILENAME}\.php -f

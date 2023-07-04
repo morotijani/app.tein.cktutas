@@ -59,32 +59,35 @@
 	            $email = $row[0]['membership_email'];
 
 	            if ($level == 'L100') {
-	            	if ($row[0]['level_100'] == 1) {
+	            	if ($row[0]['level_100'] != null) {
 	            		$lvl = 'L200';
-	            	} else if ($row[0]['level_200'] == 1) {
+	            	}
+
+	            	if ($row[0]['level_200'] != null) {
 	            		$lvl = 'L300';
-	            	} else if ($row[0]['level_300'] == 1) {
+	            	}
+
+	            	if ($row[0]['level_300'] != null) {
 	            		$lvl = 'L400';
-	            	} else {
-	            		$lvl = 'L100';
 	            	}
 	            } elseif ($level == 'L200') {
-	            	if ($row[0]['level_200'] == 1) {
+	            	if ($row[0]['level_200'] != null) {
 	            		$lvl = 'L300';
-	            	} else if ($row[0]['level_300'] == 1) {
+	            	}
+
+	            	if ($row[0]['level_300'] != null) {
 	            		$lvl = 'L400';
-	            	} else {
-	            		$lvl = 'L200';
 	            	}
 	            } elseif ($level == 'L300') {
-	            	if ($row[0]['level_300'] == 1) {
+	            	if ($row[0]['level_300'] != null) {
 	            		$lvl = 'L400';
-	            	} else {
-	            		$lvl = 'L300';
 	            	}
-	            } else {
-	            	$lvl = 'L100';
 	            }
+
+	            if ($row[0]['level_400'] != null) {
+	            	$lvl = 'done';
+	            }
+
 		        $cout['msg'] = '200';
 		        $cout['mid'] = $member_id;
 		        $cout['email'] = $email;

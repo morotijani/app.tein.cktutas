@@ -13,7 +13,7 @@
     $rows = $statement->fetchAll();
 
 ?>
-    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="background: linear-gradient(0deg, rgba(255, 0, 150, 0.3), rgba(255, 0, 150, 0.3)), url(<?= PROOT; ?>dist/media/bg-1.jpg); background-position: center; background-repeat: no-repeat; background-size: cover;">
+    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="background: linear-gradient(0deg, #616161, #424242a8), url(<?= PROOT; ?>dist/media/bg-1.jpg); background-position: center; background-repeat: no-repeat; background-size: cover;">
         <div class="col-lg-6 px-0">
             <h1 class="display-4 fst-italic">Know your executives</h1>
             <p class="lead my-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa eum omnis mollitia adipisci, sed veniam in consequatur totam obcaecati, facere ipsam quas et assumenda velit esse repudiandae voluptate laboriosam incidunt!</p>

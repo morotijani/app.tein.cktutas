@@ -99,8 +99,8 @@
                                 $('#mID').val(response["mid"]);
                                 $('#email').val(response["email"]);
                                 $('#level').val(response["level"]);
-                                
                             }
+
                             $('.membership_msg').html('');
                             $('#second').removeClass('d-none');
                             $("#member_id").attr('readonly', true);
@@ -134,9 +134,17 @@
                         $('.membership_msg').html('Membership Id do not exist, you can claim a membership ID <a href="<?= PROOT; ?>get-membership-card">here</a>');
                         return false
                     } else {
-                        $('#mID').val(response["mid"]);
-                        $('#email').val(response["email"]);
-                        $('#level').val(response["level"]);
+                        if (response["level"] == 'done') {
+                            $('#level').val('All dues paid');
+                            $('#level').addClass('text-success fw-bolder');
+                            
+                            $('#submit').attr('disabled', true)
+                            $('#submit').addClass('d-none')
+                        } else {
+                            $('#mID').val(response["mid"]);
+                            $('#email').val(response["email"]);
+                            $('#level').val(response["level"]);
+                        }
 
                         $('.membership_msg').html('');
                         return true;
@@ -205,9 +213,17 @@
                             $('.membership_msg').html('Membership Id do not exist, you can claim a membership ID <a href="<?= PROOT; ?>get-membership-card">here</a>');
                             return false
                         } else {
-                            $('#mID').val(response["mid"]);
-                            $('#email').val(response["email"]);
-                            $('#level').val(response["level"]);
+                            if (response["level"] == 'done') {
+                                $('#level').val('All dues paid');
+                                $('#level').addClass('text-success fw-bolder');
+                                
+                                $('#submit').attr('disabled', true)
+                                $('#submit').addClass('d-none')
+                            } else {
+                                $('#mID').val(response["mid"]);
+                                $('#email').val(response["email"]);
+                                $('#level').val(response["level"]);
+                            }
 
                             $('.membership_msg').html('');
 

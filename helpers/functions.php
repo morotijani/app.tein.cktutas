@@ -1,12 +1,14 @@
 <?php 
 
 	class AllFunctions {
-		private $front = 'CKTUTAS/TEIN/';
+		private $front = 'CKT-';
 		
 		public function generate_identity_number($id) {
 			$thisYr = date("y");
 			$thisYr = substr($thisYr, -2);
-			return ($this->front . str_pad($id, 5, "0", STR_PAD_LEFT) . '/' . $thisYr);
+			$output = $this->front . $thisYr . '-';
+			$output = $output . str_pad($id, 5, "0", STR_PAD_LEFT);
+			return $output;
 		}
 	}
 

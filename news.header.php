@@ -25,6 +25,7 @@
     
     <title>News · TEIN - CKTUTAS</title>
     <link href="<?= PROOT; ?>assets/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="<?= PROOT; ?>dist/media/logo/logo.png" sizes="32x32">
     
     <meta name="theme-color" content="#712cf9">
 

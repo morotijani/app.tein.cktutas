@@ -29,7 +29,7 @@
                         <div class="card">
                             <img src="<?= PROOT . $row["membership_passport"]; ?>" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title"><?= strtoupper($row["membership_fname"] . ' ' . $row["membership_lname"]); ?></h5>
+                                <h5 class="card-title"><?= ucwords($row["membership_fname"] . ' ' . $row["membership_lname"]); ?></h5>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><?= ucwords($row["membership_position"]); ?></li>
